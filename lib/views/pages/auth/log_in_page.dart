@@ -5,10 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 import '../../../dtos/login_dto.dart';
-import '../../../models/User.dart';
+import '../../../models/user.dart';
 import '../../../services/api_service.dart';
 import '../../../services/auth_service.dart';
-
 
 class LogInPage extends StatefulWidget {
   LogInPage({Key? key}) : super(key: key);

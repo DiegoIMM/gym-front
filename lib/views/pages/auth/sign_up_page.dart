@@ -5,11 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 import '../../../dtos/sign_up_dto.dart';
-import '../../../models/User.dart';
+import '../../../models/user.dart';
 import '../../../services/api_service.dart';
 import '../../../services/auth_service.dart';
-
-
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({Key? key}) : super(key: key);
@@ -36,7 +34,6 @@ class _SignUpPageState extends State<SignUpPage> {
         value: kDebugMode ? 'q1w2e3r4' : '', validators: [Validators.required]),
     'confirmPassword': FormControl<String>(
         value: kDebugMode ? 'q1w2e3r4' : '', validators: [Validators.required]),
-
     'acceptTerms': FormControl<bool>(
         value: kDebugMode ? true : false,
         validators: [Validators.requiredTrue]),
@@ -160,7 +157,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         'mustMatch': (error) => 'Las contraseñas no coinciden',
                       },
                     ),
-
 
                     const SizedBox(height: 20),
 
@@ -302,7 +298,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   'mustMatch': (error) => 'Las contraseñas no coinciden',
                 },
               ),
-
 
               const SizedBox(height: 20),
 

@@ -2,31 +2,58 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:gym_front/dtos/plan_dto.dart';
+import 'package:provider/provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
+import '../../models/plan.dart';
 import '../../services/api_service.dart';
+import '../../services/scaffold_messenger_service.dart';
 
-class PlanForm extends StatelessWidget {
-  PlanForm({super.key});
+class PlanForm extends StatefulWidget {
+  const PlanForm({super.key, this.plan});
 
+  final Plan? plan;
+
+  @override
+  State<PlanForm> createState() => _PlanFormState();
+}
+
+class _PlanFormState extends State<PlanForm> {
   final ApiService apiService = ApiService();
+
   bool isLoading = false;
-  final formPlan = FormGroup({
-    'enabled': FormControl<bool>(value: true, validators: [
-      Validators.required,
-    ]),
-    'name': FormControl<String>(value: '', validators: [
-      Validators.required,
-    ]),
-    'description': FormControl<String>(value: '', validators: [
-      Validators.required,
-    ]),
-    'period': FormControl<String>(value: '', validators: [
-      Validators.required,
-    ]),
-    'price': FormControl<int>(
-        value: 0, validators: [Validators.number, Validators.required]),
-  });
+
+  late FormGroup formPlan;
+
+  @override
+  initState() {
+    super.initState();
+    formPlan = FormGroup({
+      'enabled': FormControl<bool>(
+          value: widget.plan != null ? widget.plan!.enabled : true,
+          validators: [
+            Validators.required,
+          ]),
+      'name': FormControl<String>(
+          value: widget.plan != null ? widget.plan!.name : '',
+          validators: [
+            Validators.required,
+          ]),
+      'description': FormControl<String>(
+          value: widget.plan != null ? widget.plan!.description : '',
+          validators: [
+            Validators.required,
+          ]),
+      'period': FormControl<String>(
+          value: widget.plan != null ? widget.plan!.period : 'Mensual',
+          validators: [
+            Validators.required,
+          ]),
+      'price': FormControl<int>(
+          value: widget.plan != null ? widget.plan!.price : 0,
+          validators: [Validators.number, Validators.required]),
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +71,9 @@ class PlanForm extends StatelessWidget {
           // title: widget.question != null
           title:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            false
+            widget.plan != null
                 ? Text(
-                    'Editar pregunta',
+                    'Editar plan',
                     style: Theme.of(context).textTheme.displayMedium,
                   )
                 : Text(
@@ -188,30 +215,30 @@ class PlanForm extends StatelessWidget {
       print(
           'Formulario enviado -> ${PlanDTO.fromJson(formPlan.value).toJson()}');
 
-      //   setState(() {
-      //     _isLoading = true;
-      //   });
-      //   _apiService.addQuestion(QuestionDTO.fromJson(form.value)).then((value) {
-      //     Provider.of<ScaffoldMessengerService>(context, listen: false)
-      //         .showSnackBar(
-      //       "Pregunta creada correctamente",
-      //     );
-      //
-      //     //   Cerrar el dialogo
-      //     Navigator.of(context).pop();
-      //   }).catchError((error) {
-      //     setState(() {
-      //       _isLoading = false;
-      //     });
-      //     ScaffoldMessenger.of(context).showSnackBar(
-      //       SnackBar(
-      //         content: Text(error.toString()),
-      //       ),
-      //     );
-      //   });
-      // } else {
-      //   print('Formulario invalido');
-      //   form.markAllAsTouched();
+      setState(() {
+        isLoading = true;
+      });
+      apiService.createPlan(PlanDTO.fromJson(formPlan.value)).then((value) {
+        Provider.of<ScaffoldMessengerService>(context, listen: false)
+            .showSnackBar(
+          "Plan creado correctamente",
+        );
+
+        //   Cerrar el dialogo
+        Navigator.of(context).pop(true);
+      }).catchError((error) {
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.toString()),
+          ),
+        );
+      });
+    } else {
+      print('Formulario invalido');
+      formPlan.markAllAsTouched();
     }
   }
 }
