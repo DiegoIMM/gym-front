@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../dtos/client_dto.dart';
 import '../dtos/login_dto.dart';
 import '../dtos/plan_dto.dart';
 import '../dtos/set_new_pass_dto.dart';
 import '../dtos/sign_up_dto.dart';
 import '../dtos/update_user_dto.dart';
+import '../models/client.dart';
 import '../models/environments/environment.dart';
 import '../models/plan.dart';
 import 'auth_service.dart';
@@ -31,18 +33,19 @@ class ApiService {
   // TODO: estandarizar envío de mensajes
   Future<dynamic> _handleResponse(http.Response response) async {
     print('status code: ${response.statusCode}');
-    var decodedData = json.decode(utf8.decode(response.bodyBytes));
     print('response body ->: ${response.body}');
-    print('response body ->: ${utf8.decode(response.bodyBytes)}');
 
+    var decodedData = json.decode(utf8.decode(response.bodyBytes));
+    print('decodedData: $decodedData');
     switch (response.statusCode) {
       case 200 || 201:
+        print('response body ->: ${response.body}');
+        print('response body ->: ${utf8.decode(response.bodyBytes)}');
         print('entro al 20* con el body: $decodedData');
         print('decodedData: $decodedData');
         return decodedData;
       case 400:
-        print('entro al 400 con el body: ${response.body}');
-        throw decodedData['message'];
+        throw response.body;
       case 401:
         // No hay token, es invalido o hay un error de seguridad
         throw 'No tienes permiso para realizar esta acción';
@@ -201,31 +204,47 @@ class ApiService {
   }
 
   Future<dynamic> createPlan(PlanDTO planDTO) async {
-    print('signUp');
-
     final response = await http.post(Uri.parse('${_apiUrl}plan/insert'),
         body: jsonEncode(planDTO.toJson()), headers: headers);
 
-    await _handleResponse(response).catchError((error) {
+    var jsonResult = await _handleResponse(response).catchError((error) {
       print('Errorr: $error');
       throw error;
     });
-    var json = jsonDecode(response.body);
-    print('jsonUser:${json['user']}');
-    return json;
+    return jsonResult;
   }
 
   Future<List<Plan>> getAllActivePlans() async {
-    print('signUp');
-
     final response = await http.get(Uri.parse('${_apiUrl}plan/all/enable'),
         headers: headers);
 
-    var a = await _handleResponse(response).catchError((error) {
-      print('Errorr: $error');
+    var jsonResult = await _handleResponse(response).catchError((error) {
       throw error;
     });
 
-    return Plan.fromJsonList(a);
+    return Plan.fromJsonList(jsonResult);
+  }
+
+  Future<List<Client>> getClientsByEnterprise() async {
+    // TODO: Reemplazar a endpoint que usa empresas para buscar los clientes filtrados
+    final response =
+        await http.get(Uri.parse('${_apiUrl}client/all'), headers: headers);
+
+    var jsonResult = await _handleResponse(response).catchError((error) {
+      throw error;
+    });
+
+    return Client.fromJsonList(jsonResult);
+  }
+
+  Future<dynamic> createClient(ClientDTO clientDTO) async {
+    final response = await http.post(Uri.parse('${_apiUrl}client/insert'),
+        body: jsonEncode(clientDTO.toJson()), headers: headers);
+
+    var jsonResult = await _handleResponse(response).catchError((error) {
+      print('Errorr: $error');
+      throw error;
+    });
+    return jsonResult;
   }
 }

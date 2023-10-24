@@ -106,6 +106,20 @@ class MainLayout extends StatelessWidget {
                 context.go('/planes');
               },
             ),
+            ListTile(
+              title: const Text('Clientes'),
+              selected: GoRouterState.of(context).path == '/app/clientes',
+              onTap: () {
+                context.go('/clientes');
+              },
+            ),
+            ListTile(
+              title: const Text('Pagos'),
+              selected: GoRouterState.of(context).path == '/app/pagos',
+              onTap: () {
+                context.go('/pagos');
+              },
+            )
           ],
         ),
       );
@@ -113,7 +127,7 @@ class MainLayout extends StatelessWidget {
 
     AppBar buildDesktopAppBar() {
       return AppBar(
-        title: const Text('Ayuda Abogados'),
+        title: const Text('Gym'),
 /*
         actions: [
           context.watch<AuthService>().isAuthenticated
@@ -185,7 +199,7 @@ class MainLayout extends StatelessWidget {
 
     AppBar buildMobileAppBar() {
       return AppBar(
-        title: const Text('Ayuda Abogados'),
+        title: const Text('Gym'),
 /*
         actions: [
           context.watch<AuthService>().isAuthenticated

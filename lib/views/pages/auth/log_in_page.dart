@@ -45,7 +45,7 @@ class _LogInPageState extends State<LogInPage> {
                       ),
                       const Center(
                         child: Text(
-                          'Bienvenido a Ayuda Abogados',
+                          'Bienvenido a Gym',
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.w900,
@@ -159,7 +159,7 @@ class _LogInPageState extends State<LogInPage> {
               ),
               const Center(
                 child: Text(
-                  'Bienvenido a Ayuda Abogados',
+                  'Bienvenido a Gym',
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w900,

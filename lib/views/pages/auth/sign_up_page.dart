@@ -55,7 +55,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     //   size: 100,
                     // ),
                     // const Text(
-                    //   'Bienvenido a Ayuda Abogados',
+                    //   'Bienvenido a Gym',
                     //   style: TextStyle(
                     //     fontSize: 30,
                     //     fontWeight: FontWeight.w900,
@@ -213,7 +213,7 @@ class _SignUpPageState extends State<SignUpPage> {
               //   size: 100,
               // ),
               // const Text(
-              //   'Bienvenido a Ayuda Abogados',
+              //   'Bienvenido a Gym',
               //   style: TextStyle(
               //     fontSize: 30,
               //     fontWeight: FontWeight.w900,

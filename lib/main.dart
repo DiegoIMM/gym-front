@@ -7,7 +7,9 @@ import 'package:gym_front/views/pages/auth/set_new_password_page.dart';
 import 'package:gym_front/views/pages/auth/sign_up_page.dart';
 import 'package:gym_front/views/pages/auth/validate_account_page.dart';
 import 'package:gym_front/views/pages/auth/validate_email_page.dart';
+import 'package:gym_front/views/pages/clients_page.dart';
 import 'package:gym_front/views/pages/home_page.dart';
+import 'package:gym_front/views/pages/payment_page.dart';
 import 'package:gym_front/views/pages/plans_page.dart';
 import 'package:gym_front/views/widgets/not_found_widget.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +17,6 @@ import 'package:provider/provider.dart';
 import 'models/environments/environment.dart';
 import 'services/auth_service.dart';
 import 'services/scaffold_messenger_service.dart';
-
 
 Future<void> main() async {
   const String environment = String.fromEnvironment(
@@ -38,6 +39,7 @@ Future<void> main() async {
     ),
   );
 }
+
 final _router = GoRouter(
   initialLocation: '/inicio',
   debugLogDiagnostics: true,
@@ -51,7 +53,8 @@ final _router = GoRouter(
       routes: <RouteBase>[
         GoRoute(
           path: '/auth',
-          builder: (context, state) => const Material(child: Text("AuthLayout-noSeUtiliza")),
+          builder: (context, state) =>
+              const Material(child: Text("AuthLayout-noSeUtiliza")),
           routes: [
             GoRoute(
               path: 'login',
@@ -64,7 +67,7 @@ final _router = GoRouter(
             GoRoute(
               path: 'recovery-password',
               builder: (context, state) =>
-              const Material(child: RecoveryPassPage()),
+                  const Material(child: RecoveryPassPage()),
             ),
             GoRoute(
               path: 'validate-account/:token',
@@ -88,6 +91,15 @@ final _router = GoRouter(
           path: '/planes',
           builder: (context, state) => const Material(child: PlanPage()),
         ),
+        GoRoute(
+          path: '/clientes',
+          builder: (context, state) => const Material(child: ClientsPage()),
+        ),
+        GoRoute(
+          path: '/pagos',
+          builder: (context, state) => const Material(child: PaymentPage()),
+        ),
+
         //
         // GoRoute(
         //   path: '/perfil/:username',
@@ -172,8 +184,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       scaffoldMessengerKey:
-      Provider.of<ScaffoldMessengerService>(context, listen: false)
-          .rootScaffoldMessengerKey,
+          Provider.of<ScaffoldMessengerService>(context, listen: false)
+              .rootScaffoldMessengerKey,
       routerConfig: _router,
       debugShowCheckedModeBanner: false,
       debugShowMaterialGrid: false,
@@ -477,4 +489,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

@@ -4,7 +4,6 @@ import 'package:reactive_forms/reactive_forms.dart';
 
 import '../../../services/api_service.dart';
 
-
 class RecoveryPassPage extends StatefulWidget {
   const RecoveryPassPage({Key? key}) : super(key: key);
   static final _apiService = ApiService();
@@ -35,7 +34,7 @@ class _RecoveryPassPageState extends State<RecoveryPassPage> {
                   //   size: 100,
                   // ),
                   // const Text(
-                  //   'Bienvenido a Ayuda Abogados',
+                  //   'Bienvenido a Gym',
                   //   style: TextStyle(
                   //     fontSize: 30,
                   //     fontWeight: FontWeight.w900,

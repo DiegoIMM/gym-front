@@ -5,7 +5,6 @@ import 'package:reactive_forms/reactive_forms.dart';
 import '../../../dtos/set_new_pass_dto.dart';
 import '../../../services/api_service.dart';
 
-
 class SetNewPasswordPage extends StatefulWidget {
   const SetNewPasswordPage({required this.token, Key? key}) : super(key: key);
   final String token;
@@ -43,7 +42,7 @@ class _SetNewPasswordPageState extends State<SetNewPasswordPage> {
                   //   size: 100,
                   // ),
                   // const Text(
-                  //   'Bienvenido a Ayuda Abogados',
+                  //   'Bienvenido a Gym',
                   //   style: TextStyle(
                   //     fontSize: 30,
                   //     fontWeight: FontWeight.w900,

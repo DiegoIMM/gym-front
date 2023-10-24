@@ -1,22 +1,22 @@
-class Category {
-  int id;
-  String name;
+class Payment {
+  final int id;
+  final String name;
 
-  Category({
+  Payment({
     required this.id,
     required this.name,
   });
 
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
+  factory Payment.fromJson(Map<String, dynamic> json) {
+    return Payment(
       id: json['id'],
       name: json['name'],
     );
   }
 
-  static List<Category> fromJsonList(List<dynamic> jsonList) {
+  static List<Payment> fromJsonList(List<dynamic> jsonList) {
     return jsonList.map((json) {
-      return Category.fromJson(json);
+      return Payment.fromJson(json);
     }).toList();
   }
 
