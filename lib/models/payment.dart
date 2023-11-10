@@ -1,16 +1,34 @@
 class Payment {
   final int id;
-  final String name;
+  final DateTime date;
+  final DateTime expiredAt;
+  final int price;
+  final String typeOfPayment;
+  final String rutClient;
+  final int idPlan;
+  final int idEmpresa;
 
   Payment({
     required this.id,
-    required this.name,
+    required this.date,
+    required this.expiredAt,
+    required this.price,
+    required this.typeOfPayment,
+    required this.rutClient,
+    required this.idPlan,
+    required this.idEmpresa,
   });
 
   factory Payment.fromJson(Map<String, dynamic> json) {
     return Payment(
       id: json['id'],
-      name: json['name'],
+      date: DateTime.parse(json['date']),
+      expiredAt: DateTime.parse(json['expiredAt']),
+      price: json['price'],
+      typeOfPayment: json['typeOfPayment'],
+      rutClient: json['rutClient'],
+      idPlan: json['idPlan'],
+      idEmpresa: json['idEmpresa'],
     );
   }
 
@@ -22,6 +40,12 @@ class Payment {
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'name': name,
+        'date': date.toString().substring(0, 10),
+        'expiredAt': expiredAt.toString().substring(0, 10),
+        'price': price,
+        'typeOfPayment': typeOfPayment,
+        'rutClient': rutClient,
+        'idPlan': idPlan,
+        'idEmpresa': idEmpresa,
       };
 }

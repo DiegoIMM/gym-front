@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:gym_front/dtos/payment_dto.dart';
 import 'package:http/http.dart' as http;
 
 import '../dtos/client_dto.dart';
@@ -10,6 +11,7 @@ import '../dtos/sign_up_dto.dart';
 import '../dtos/update_user_dto.dart';
 import '../models/client.dart';
 import '../models/environments/environment.dart';
+import '../models/payment.dart';
 import '../models/plan.dart';
 import 'auth_service.dart';
 
@@ -214,6 +216,17 @@ class ApiService {
     return jsonResult;
   }
 
+  Future<dynamic> createPayment(PaymentDTO paymentDTO) async {
+    final response = await http.post(Uri.parse('${_apiUrl}payment/insert'),
+        body: jsonEncode(paymentDTO.toJson()), headers: headers);
+
+    var jsonResult = await _handleResponse(response).catchError((error) {
+      print('Errorr: $error');
+      throw error;
+    });
+    return jsonResult;
+  }
+
   Future<List<Plan>> getAllActivePlans() async {
     final response = await http.get(Uri.parse('${_apiUrl}plan/all/enable'),
         headers: headers);
@@ -223,6 +236,17 @@ class ApiService {
     });
 
     return Plan.fromJsonList(jsonResult);
+  }
+
+  Future<List<Payment>> getAllActivePayments() async {
+    final response =
+        await http.get(Uri.parse('${_apiUrl}payment/all'), headers: headers);
+
+    var jsonResult = await _handleResponse(response).catchError((error) {
+      throw error;
+    });
+
+    return Payment.fromJsonList(jsonResult);
   }
 
   Future<List<Client>> getClientsByEnterprise() async {

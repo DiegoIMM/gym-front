@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_front/views/pages/payment_form.dart';
 
 import '../../models/payment.dart';
 import '../../services/api_service.dart';
@@ -25,7 +26,7 @@ class _PlanPageState extends State<PaymentPage> {
 
   void getPayments() {
     setState(() {
-      // futurePlans = apiService.getAllActivePlans();
+      futurePayments = apiService.getAllActivePayments();
     });
   }
 
@@ -38,7 +39,7 @@ class _PlanPageState extends State<PaymentPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Planes',
+                'Pagos',
                 style: Theme.of(context).textTheme.displayMedium,
               ),
               ElevatedButton(
@@ -46,7 +47,7 @@ class _PlanPageState extends State<PaymentPage> {
                     var result = await showDialog<dynamic>(
                       context: context,
                       builder: (BuildContext context) {
-                        return const Text("TODO: Crear form pagos");
+                        return const PaymentForm();
                       },
                     );
                     if (result) {
@@ -98,7 +99,7 @@ class _PlanPageState extends State<PaymentPage> {
                                         vertical: (width > 1000) ? 8.0 : 0.0,
                                         horizontal: (width > 1000) ? 50.0 : 8.0,
                                       ),
-                                      child: Text(payment.name)),
+                                      child: Text(payment.rutClient)),
                               ],
                             ),
                           );
