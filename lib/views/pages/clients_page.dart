@@ -93,13 +93,97 @@ class _ClientsPageState extends State<ClientsPage> {
                         : SingleChildScrollView(
                             child: Column(
                               children: [
-                                for (var client in clients)
-                                  Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: (width > 1000) ? 8.0 : 0.0,
-                                        horizontal: (width > 1000) ? 50.0 : 8.0,
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: (width > 1000) ? 8.0 : 0.0,
+                                    horizontal: (width > 1000) ? 50.0 : 8.0,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: DataTable(
+                                          columns: const <DataColumn>[
+                                            DataColumn(
+                                              label: Text(
+                                                'Nombre',
+                                                style: TextStyle(
+                                                    fontStyle:
+                                                        FontStyle.italic),
+                                              ),
+                                            ),
+                                            DataColumn(
+                                              label: Text(
+                                                'Teléfono',
+                                                style: TextStyle(
+                                                    fontStyle:
+                                                        FontStyle.italic),
+                                              ),
+                                            ),
+                                            DataColumn(
+                                              label: Text(
+                                                'Plan',
+                                                style: TextStyle(
+                                                    fontStyle:
+                                                        FontStyle.italic),
+                                              ),
+                                            ),
+                                            DataColumn(
+                                              label: Text(
+                                                'Fecha expiración',
+                                                style: TextStyle(
+                                                    fontStyle:
+                                                        FontStyle.italic),
+                                              ),
+                                            ),
+                                            DataColumn(
+                                              label: Text(
+                                                'Acciones',
+                                                style: TextStyle(
+                                                    fontStyle:
+                                                        FontStyle.italic),
+                                              ),
+                                            ),
+                                          ],
+                                          rows: <DataRow>[
+                                            for (var client in clients)
+                                              DataRow(
+                                                cells: <DataCell>[
+                                                  DataCell(Text(client.name)),
+                                                  DataCell(Text(client.phone)),
+                                                  DataCell(Text(client.idPlan
+                                                          .toString() ??
+                                                      'Sin plan')),
+                                                  DataCell(Text(client.email)),
+                                                  DataCell(
+                                                    IconButton(
+                                                      icon: const Icon(
+                                                          Icons.edit),
+                                                      tooltip: 'Editar',
+                                                      onPressed: () async {
+                                                        var result =
+                                                            await showDialog<
+                                                                dynamic>(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return ClientForm(
+                                                                client: client);
+                                                          },
+                                                        );
+                                                        if (result) {
+                                                          getClients();
+                                                        }
+                                                      },
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                          ],
+                                        ),
                                       ),
-                                      child: Text(client.name)),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           );

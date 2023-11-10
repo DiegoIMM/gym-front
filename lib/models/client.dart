@@ -5,7 +5,7 @@ class Client {
   String email;
   String phone;
   String auxiliarPhone;
-  int idEmpresa;
+  int? idEmpresa;
 
   String? city;
   String? comuna;
@@ -38,15 +38,19 @@ class Client {
         comuna: json['comuna'],
         city: json['city'],
         auxiliarPhone: json['auxiliarPhone'],
-        birthDate: json['birthDate'],
+        birthDate: json['birthDate'] != null
+            ? DateTime.parse(json['birthDate'].toString())
+            : null,
         email: json['email'],
         enabled: json['enabled'],
-        expiredAt: json['expiredAt'],
+        expiredAt: json['expiredAt'] != null
+            ? DateTime.parse(json['expiredAt'].toString())
+            : null,
         name: json['name'],
         phone: json['phone'],
-        idPlan: json['idPlan'],
-        idPayment: json['idPayment'],
-        idEmpresa: json['idEmpresa'],
+        idPlan: json['idPlan'] == null ? 0 : int.parse(json['idPlan']),
+        idPayment: json['idPayment'] == null ? 0 : int.parse(json['idPayment']),
+        idEmpresa: json['idEmpresa'] == null ? 0 : int.parse(json['idEmpresa']),
       );
 
   static List<Client> fromJsonList(List<dynamic> jsonList) {
