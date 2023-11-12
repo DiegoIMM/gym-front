@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gym_front/views/main_layout.dart';
@@ -14,6 +15,7 @@ import 'package:gym_front/views/pages/plans_page.dart';
 import 'package:gym_front/views/widgets/not_found_widget.dart';
 import 'package:provider/provider.dart';
 
+import 'firebase_options.dart';
 import 'models/environments/environment.dart';
 import 'services/auth_service.dart';
 import 'services/scaffold_messenger_service.dart';
@@ -25,9 +27,9 @@ Future<void> main() async {
   );
 
   Environment().initConfig(environment);
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(
     MultiProvider(

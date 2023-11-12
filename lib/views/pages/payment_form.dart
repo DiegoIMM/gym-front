@@ -114,22 +114,32 @@ class _PaymentFormState extends State<PaymentForm> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        ReactiveDropdownField(
-                            formControlName: 'rutClient',
-                            items: allClients
-                                .map((client) => DropdownMenuItem(
-                                      value: client.rut,
-                                      child: Text(client.rut),
-                                    ))
-                                .toList()),
-                        ReactiveDropdownField(
-                            formControlName: 'idPlan',
-                            items: allPlans
-                                .map((plan) => DropdownMenuItem(
-                                      value: plan.id,
-                                      child: Text(plan.name),
-                                    ))
-                                .toList()),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ReactiveDropdownField(
+                                  formControlName: 'rutClient',
+                                  hint: const Text('Rut Cliente'),
+                                  items: allClients
+                                      .map((client) => DropdownMenuItem(
+                                            value: client.rut,
+                                            child: Text(client.rut),
+                                          ))
+                                      .toList()),
+                            ),
+                            Expanded(
+                              child: ReactiveDropdownField(
+                                  formControlName: 'idPlan',
+                                  hint: const Text('Plan'),
+                                  items: allPlans
+                                      .map((plan) => DropdownMenuItem(
+                                            value: plan.id,
+                                            child: Text(plan.name),
+                                          ))
+                                      .toList()),
+                            ),
+                          ],
+                        ),
                         ReactiveTextField(
                           enableInteractiveSelection: true,
                           enableSuggestions: true,

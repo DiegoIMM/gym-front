@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "949823634763",
+    "project_id": "planeta-fitness-f",
+    "storage_bucket": "planeta-fitness-f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949823634763:android:4034672e70a2ff85227cce",
+        "android_client_info": {
+          "package_name": "com.albadevs.gym_front"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBh6K5g6NEhlA-94Qu2hWq_uVhXZvX9VtE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
