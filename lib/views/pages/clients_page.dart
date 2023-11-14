@@ -150,9 +150,10 @@ class _ClientsPageState extends State<ClientsPage> {
                                                 cells: <DataCell>[
                                                   DataCell(Text(client.name)),
                                                   DataCell(Text(client.phone)),
-                                                  DataCell(Text(client.idPlan
-                                                          .toString() ??
-                                                      'Sin plan')),
+                                                  DataCell(Text(
+                                                      client.plan != null
+                                                          ? client.plan!.name
+                                                          : 'Sin plan')),
                                                   DataCell(Text(client.email)),
                                                   DataCell(
                                                     IconButton(

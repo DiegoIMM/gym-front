@@ -60,7 +60,7 @@ class _PlanPageState extends State<PaymentPage> {
                         Icons.add,
                         color: Colors.purple,
                       ),
-                      Text('Crear Plan',
+                      Text('Nuevo pago',
                           style: TextStyle(color: Colors.purple)),
                     ],
                   ))
@@ -91,18 +91,74 @@ class _PlanPageState extends State<PaymentPage> {
                     return payments.isEmpty
                         ? NoData()
                         : SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                for (var payment in payments)
-                                  Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: (width > 1000) ? 8.0 : 0.0,
-                                        horizontal: (width > 1000) ? 50.0 : 8.0,
-                                      ),
-                                      child: Text(payment.typeOfPayment)),
-                              ],
-                            ),
-                          );
+                            child: Column(children: [
+                            Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: (width > 1000) ? 8.0 : 0.0,
+                                  horizontal: (width > 1000) ? 50.0 : 8.0,
+                                ),
+                                child: Row(children: [
+                                  Expanded(
+                                    child: DataTable(
+                                      columns: const <DataColumn>[
+                                        DataColumn(
+                                          label: Text(
+                                            'Fecha',
+                                            style: TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Text(
+                                            'Cliente',
+                                            style: TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Text(
+                                            'Plan',
+                                            style: TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Text(
+                                            'Expira',
+                                            style: TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Text(
+                                            'Pagado',
+                                            style: TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                        ),
+                                      ],
+                                      rows: [
+                                        for (var payment in payments)
+                                          DataRow(
+                                            cells: <DataCell>[
+                                              DataCell(Text(payment.date
+                                                  .toString()
+                                                  .substring(0, 10))),
+                                              DataCell(Text(
+                                                  '${payment.client.name} ${payment.client.rut}')),
+                                              DataCell(Text(payment.plan.name)),
+                                              DataCell(Text(payment.expiredAt
+                                                  .toString()
+                                                  .substring(0, 10))),
+                                              DataCell(Text(
+                                                  payment.price.toString())),
+                                            ],
+                                          ),
+                                      ],
+                                    ),
+                                  )
+                                ]))
+                          ]));
                   } else {
                     return const Text('No hay datos');
                   }

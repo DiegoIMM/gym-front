@@ -1,3 +1,5 @@
+import 'package:gym_front/models/plan.dart';
+
 class Client {
   bool enabled;
   String rut;
@@ -14,6 +16,7 @@ class Client {
   int? idPlan;
   int? idPayment;
   DateTime? expiredAt;
+  Plan? plan;
 
   Client({
     required this.enabled,
@@ -30,6 +33,7 @@ class Client {
     this.idPlan,
     this.idPayment,
     this.expiredAt,
+    this.plan,
   });
 
   factory Client.fromJson(Map<String, dynamic> json) => Client(
@@ -51,6 +55,7 @@ class Client {
         idPlan: json['idPlan'] == null ? 0 : int.parse(json['idPlan']),
         idPayment: json['idPayment'] == null ? 0 : int.parse(json['idPayment']),
         idEmpresa: json['idEmpresa'] == null ? 0 : int.parse(json['idEmpresa']),
+        plan: json['plan'] == null ? null : Plan.fromJson(json['plan']),
       );
 
   static List<Client> fromJsonList(List<dynamic> jsonList) {
@@ -74,5 +79,6 @@ class Client {
         'idPlan': idPlan,
         'id_payment': idPayment,
         'empresa_id': idEmpresa,
+        'plan': plan?.toJson() ?? '',
       };
 }
