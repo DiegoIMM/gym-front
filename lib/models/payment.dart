@@ -1,12 +1,15 @@
+import 'package:gym_front/models/client.dart';
+import 'package:gym_front/models/plan.dart';
+
 class Payment {
   final int id;
   final DateTime date;
   final DateTime expiredAt;
   final int price;
   final String typeOfPayment;
-  final String rutClient;
-  final int idPlan;
-  final int idEmpresa;
+  final Plan plan;
+  final Client client;
+  final int? idEmpresa;
 
   Payment({
     required this.id,
@@ -14,9 +17,9 @@ class Payment {
     required this.expiredAt,
     required this.price,
     required this.typeOfPayment,
-    required this.rutClient,
-    required this.idPlan,
-    required this.idEmpresa,
+    required this.plan,
+    required this.client,
+    this.idEmpresa,
   });
 
   factory Payment.fromJson(Map<String, dynamic> json) {
@@ -26,9 +29,9 @@ class Payment {
       expiredAt: DateTime.parse(json['expiredAt']),
       price: json['price'],
       typeOfPayment: json['typeOfPayment'],
-      rutClient: json['rutClient'],
-      idPlan: json['idPlan'],
-      idEmpresa: json['idEmpresa'],
+      plan: Plan.fromJson(json['plan']),
+      client: Client.fromJson(json['client']),
+      idEmpresa: json['idEmpresa'] ?? 0,
     );
   }
 
@@ -44,8 +47,8 @@ class Payment {
         'expiredAt': expiredAt.toString().substring(0, 10),
         'price': price,
         'typeOfPayment': typeOfPayment,
-        'rutClient': rutClient,
-        'idPlan': idPlan,
-        'idEmpresa': idEmpresa,
+        'plan': plan.toJson(),
+        'client': client.toJson(),
+        'idEmpresa': idEmpresa ?? 0,
       };
 }

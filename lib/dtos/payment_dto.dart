@@ -28,8 +28,8 @@ class PaymentDTO {
       };
 
   factory PaymentDTO.fromJson(Map<String, dynamic> json) => PaymentDTO(
-        date: DateTime.parse(json['date']),
-        expiredAt: DateTime.parse(json['expiredAt']),
+        date: json['date'],
+        expiredAt: json['expiredAt'],
         price: json['price'],
         typeOfPayment: json['typeOfPayment'],
         rutClient: json['rutClient'],

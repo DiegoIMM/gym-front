@@ -99,7 +99,7 @@ class _PlanPageState extends State<PaymentPage> {
                                         vertical: (width > 1000) ? 8.0 : 0.0,
                                         horizontal: (width > 1000) ? 50.0 : 8.0,
                                       ),
-                                      child: Text(payment.rutClient)),
+                                      child: Text(payment.typeOfPayment)),
                               ],
                             ),
                           );

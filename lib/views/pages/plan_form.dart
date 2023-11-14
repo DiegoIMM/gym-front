@@ -133,8 +133,28 @@ class _PlanFormState extends State<PlanForm> {
                           formControlName: 'period',
                           items: const [
                             DropdownMenuItem(
+                              value: 'Diario',
+                              child: Text('Diario'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Semanal',
+                              child: Text('Semanal'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'BiSemanal',
+                              child: Text('BiSemanal'),
+                            ),
+                            DropdownMenuItem(
                               value: 'Mensual',
                               child: Text('Mensual'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Trimestral',
+                              child: Text('Trimestral'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Semestral',
+                              child: Text('Semestral'),
                             ),
                             DropdownMenuItem(
                               value: 'Anual',

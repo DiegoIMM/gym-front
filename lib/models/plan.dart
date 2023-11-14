@@ -15,6 +15,27 @@ class Plan {
     required this.price,
   });
 
+  int durationInDays() {
+    switch (period) {
+      case 'Diario':
+        return 1;
+      case 'Semanal':
+        return 7;
+      case 'BiSemanal':
+        return 14;
+      case 'Mensual':
+        return 30;
+      case 'Trimestral':
+        return 92;
+      case 'Semestral':
+        return 184;
+      case 'Anual':
+        return 365;
+      default:
+        return 0;
+    }
+  }
+
   factory Plan.fromJson(Map<String, dynamic> json) {
     return Plan(
       id: json['id'],

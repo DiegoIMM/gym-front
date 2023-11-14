@@ -35,12 +35,39 @@ class _PaymentFormState extends State<PaymentForm> {
     super.initState();
     formPayment = FormGroup({
       'rutClient': FormControl<String>(
-          value: widget.payment != null ? widget.payment!.rutClient : '',
+          value: widget.payment != null ? widget.payment!.typeOfPayment : '',
+          validators: [
+            Validators.required,
+          ]),
+      'idEmpresa': FormControl<int>(
+          value: widget.payment != null ? widget.payment!.idEmpresa : 2,
           validators: [
             Validators.required,
           ]),
       'idPlan': FormControl<int>(
-          value: widget.payment != null ? widget.payment!.idPlan : 0,
+          value: widget.payment != null ? widget.payment!.id : 0,
+          validators: [
+            Validators.required,
+          ]),
+      'typeOfPayment': FormControl<String>(
+          value: widget.payment != null ? widget.payment!.typeOfPayment : '',
+          validators: [
+            Validators.required,
+          ]),
+      'date': FormControl<DateTime>(
+          value: widget.payment != null ? widget.payment!.date : DateTime.now(),
+          validators: [
+            Validators.required,
+          ]),
+      'expiredAt': FormControl<DateTime>(
+          value: widget.payment != null
+              ? widget.payment!.expiredAt
+              : DateTime.now(),
+          validators: [
+            Validators.required,
+          ]),
+      'price': FormControl<int>(
+          value: widget.payment != null ? widget.payment!.price : 0,
           validators: [
             Validators.required,
           ]),
@@ -114,12 +141,22 @@ class _PaymentFormState extends State<PaymentForm> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        ReactiveTextField(
+                          formControlName: 'expiredAt',
+                          decoration: const InputDecoration(
+                            labelText: 'Fecha de expiración',
+                          ),
+                          readOnly: true,
+                        ),
                         Row(
                           children: [
                             Expanded(
                               child: ReactiveDropdownField(
                                   formControlName: 'rutClient',
                                   hint: const Text('Rut Cliente'),
+                                  onChanged: (value) {
+                                    calculateExpiredAt();
+                                  },
                                   items: allClients
                                       .map((client) => DropdownMenuItem(
                                             value: client.rut,
@@ -131,6 +168,9 @@ class _PaymentFormState extends State<PaymentForm> {
                               child: ReactiveDropdownField(
                                   formControlName: 'idPlan',
                                   hint: const Text('Plan'),
+                                  onChanged: (value) {
+                                    calculateExpiredAt();
+                                  },
                                   items: allPlans
                                       .map((plan) => DropdownMenuItem(
                                             value: plan.id,
@@ -140,20 +180,29 @@ class _PaymentFormState extends State<PaymentForm> {
                             ),
                           ],
                         ),
+                        ReactiveDropdownField(
+                            formControlName: 'typeOfPayment',
+                            hint: const Text('Tipo de pago'),
+                            items: const [
+                              DropdownMenuItem(
+                                value: 'Efectivo',
+                                child: Text('Efectivo'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'Crédito',
+                                child: Text('Crédito'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'Debito',
+                                child: Text('Debito'),
+                              ),
+                            ]),
                         ReactiveTextField(
-                          enableInteractiveSelection: true,
-                          enableSuggestions: true,
+                          formControlName: 'price',
                           decoration: const InputDecoration(
-                            labelText: 'Rut Cliente',
-                            icon: Icon(Icons.short_text),
+                            labelText: 'Total a pagar',
                           ),
-                          formControlName: 'rutClient',
-                          validationMessages: {
-                            'required': (error) =>
-                                'El Cliente no puede estar vacío',
-                            'minLength': (error) =>
-                                'Ingresa correctamente el rut',
-                          },
+                          readOnly: true,
                         ),
                         const SizedBox(height: 16),
                         Row(
@@ -194,13 +243,31 @@ class _PaymentFormState extends State<PaymentForm> {
                                       : Container(),
                                 ]),
                               );
-                            })
+                            }),
                           ],
                         ),
                       ],
                     ))),
           ],
         ));
+  }
+
+  void calculateExpiredAt() {
+    var date = formPayment.control('date').value;
+    var plan = allPlans
+        .firstWhere((plan) => plan.id == formPayment.control('idPlan').value);
+    var client = allClients.firstWhere(
+        (client) => client.rut == formPayment.control('rutClient').value);
+    formPayment.control('price').value = plan.price;
+
+    // TODO: Validar si es que el cliente tiene plan, se debe sumar a la fecha de expiración y no desde la fecha actual
+
+    print('date: $date');
+    print('plan: $plan');
+    print('client: $client');
+
+    var expiredAt = date.add(Duration(days: plan.durationInDays()));
+    formPayment.control('expiredAt').value = expiredAt;
   }
 
   void createPayment() {
