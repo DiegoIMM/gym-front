@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:gym_front/views/pages/plan_form.dart';
+import 'package:gym_front/views/pages/plan/plan_form.dart';
 import 'package:gym_front/views/widgets/plan_card.dart';
 
-import '../../models/plan.dart';
-import '../../services/api_service.dart';
-import '../widgets/loading_widget.dart';
-import '../widgets/no_data_widget.dart';
+import '../../../models/plan.dart';
+import '../../../services/api_service.dart';
+import '../../widgets/loading_widget.dart';
+import '../../widgets/no_data_widget.dart';
 
 class PlanPage extends StatefulWidget {
   const PlanPage({super.key});
@@ -92,18 +92,19 @@ class _PlanPageState extends State<PlanPage> {
                     return plans.isEmpty
                         ? NoData()
                         : SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                for (var plan in plans)
-                                  Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: (width > 1000) ? 8.0 : 0.0,
-                                        horizontal: (width > 1000) ? 50.0 : 8.0,
-                                      ),
-                                      child: PlanCard(plan: plan)),
-                              ],
-                            ),
-                          );
+                            child:
+                                //Hacer un grid con dos columnas, que se muestren las cards de planes con una altura fija
+                                //y que se vayan acomodando en el grid
+
+                                GridView.count(
+                                    crossAxisCount: 2,
+                                    childAspectRatio: (width / 2) / 200,
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    children: plans.map((plan) {
+                                      return PlanCard(plan: plan);
+                                    }).toList()));
                   } else {
                     return const Text('No hay datos');
                   }

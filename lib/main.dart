@@ -8,10 +8,10 @@ import 'package:gym_front/views/pages/auth/set_new_password_page.dart';
 import 'package:gym_front/views/pages/auth/sign_up_page.dart';
 import 'package:gym_front/views/pages/auth/validate_account_page.dart';
 import 'package:gym_front/views/pages/auth/validate_email_page.dart';
-import 'package:gym_front/views/pages/clients_page.dart';
+import 'package:gym_front/views/pages/client/clients_page.dart';
 import 'package:gym_front/views/pages/home_page.dart';
-import 'package:gym_front/views/pages/payment_page.dart';
-import 'package:gym_front/views/pages/plans_page.dart';
+import 'package:gym_front/views/pages/payment/payment_page.dart';
+import 'package:gym_front/views/pages/plan/plans_page.dart';
 import 'package:gym_front/views/widgets/not_found_widget.dart';
 import 'package:provider/provider.dart';
 

@@ -5,9 +5,9 @@ import 'package:gym_front/dtos/plan_dto.dart';
 import 'package:provider/provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
-import '../../models/plan.dart';
-import '../../services/api_service.dart';
-import '../../services/scaffold_messenger_service.dart';
+import '../../../models/plan.dart';
+import '../../../services/api_service.dart';
+import '../../../services/scaffold_messenger_service.dart';
 
 class PlanForm extends StatefulWidget {
   const PlanForm({super.key, this.plan});
@@ -96,6 +96,33 @@ class _PlanFormState extends State<PlanForm> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        // Agregar un panel de información warning
+                        if (widget.plan != null)
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Card(
+                                  color: Colors.yellow.shade100,
+                                  child: const Column(
+                                    children: [
+                                      Text(
+                                        '¡Atención!',
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                          'Al editar un plan, se modificarán todos los registros de pagos asociados a este plan.'),
+                                      SizedBox(height: 8),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        const SizedBox(height: 16),
+
                         ReactiveTextField(
                           enableInteractiveSelection: true,
                           enableSuggestions: true,

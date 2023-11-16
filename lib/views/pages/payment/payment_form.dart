@@ -3,11 +3,11 @@ import 'package:gym_front/models/client.dart';
 import 'package:provider/provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
-import '../../dtos/payment_dto.dart';
-import '../../models/payment.dart';
-import '../../models/plan.dart';
-import '../../services/api_service.dart';
-import '../../services/scaffold_messenger_service.dart';
+import '../../../dtos/payment_dto.dart';
+import '../../../models/payment.dart';
+import '../../../models/plan.dart';
+import '../../../services/api_service.dart';
+import '../../../services/scaffold_messenger_service.dart';
 
 class PaymentForm extends StatefulWidget {
   const PaymentForm({super.key, this.payment});

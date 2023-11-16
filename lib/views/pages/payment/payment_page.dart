@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gym_front/views/pages/payment_form.dart';
+import 'package:gym_front/views/pages/payment/payment_form.dart';
 
-import '../../models/payment.dart';
-import '../../services/api_service.dart';
-import '../widgets/loading_widget.dart';
-import '../widgets/no_data_widget.dart';
+import '../../../models/payment.dart';
+import '../../../services/api_service.dart';
+import '../../widgets/loading_widget.dart';
+import '../../widgets/no_data_widget.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key});

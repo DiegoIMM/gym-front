@@ -5,9 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rut_utils/rut_utils.dart';
 
-import '../../models/client.dart';
-import '../../services/api_service.dart';
-import '../../services/scaffold_messenger_service.dart';
+import '../../../models/client.dart';
+import '../../../services/api_service.dart';
+import '../../../services/scaffold_messenger_service.dart';
 
 class ClientForm extends StatefulWidget {
   const ClientForm({super.key, this.client});
@@ -120,7 +120,8 @@ class _ClientFormState extends State<ClientForm> {
                   ? 'Santiago'
                   : null),
       'birthDate': FormControl<DateTime>(
-          value: widget.client != null ? widget.client!.birthDate : null),
+          value: widget.client != null ? widget.client!.birthDate : null,
+          validators: [Validators.required]),
       'idPlan': FormControl<int>(
           value: widget.client != null ? widget.client!.idPlan : null),
       'idPayment': FormControl<int>(
@@ -176,7 +177,7 @@ class _ClientFormState extends State<ClientForm> {
                         enableInteractiveSelection: true,
                         enableSuggestions: true,
                         decoration: const InputDecoration(
-                          labelText: 'Nombre',
+                          labelText: 'Nombre completo',
                           icon: Icon(Icons.short_text),
                         ),
                         formControlName: 'name',
@@ -186,111 +187,135 @@ class _ClientFormState extends State<ClientForm> {
                         },
                       ),
                       const SizedBox(height: 16),
-                      // completa el resto de widgets para formClient completo
-                      ReactiveTextField(
-                        enableInteractiveSelection: true,
-                        enableSuggestions: true,
-                        onChanged: (control) {
-                          var unformattedRut =
-                              deFormatRut(control.value.toString());
-                          var formattedRut = formatRut(unformattedRut);
-                          setState(() {
-                            formClient.control('rut').value = formattedRut;
-                          });
-                        },
-                        decoration: const InputDecoration(
-                          labelText: 'Rut',
-                          icon: Icon(Icons.short_text),
-                        ),
-                        formControlName: 'rut',
-                        validationMessages: {
-                          'required': (error) => 'El rut no puede estar vacío',
-                          'formatRut': (error) =>
-                              'El rut ingresado no es válido',
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      ReactiveTextField(
-                        enableInteractiveSelection: true,
-                        enableSuggestions: true,
-                        onChanged: (control) {
-                          setState(() {
-                            formClient.control('email').value =
-                                control.value.toString().trim();
-                          });
-                        },
-                        decoration: const InputDecoration(
-                          labelText: 'Email',
-                          icon: Icon(Icons.short_text),
-                        ),
-                        formControlName: 'email',
-                        validationMessages: {
-                          'required': (error) =>
-                              'El email no puede estar vacío',
-                          'email': (error) => 'Ingresa un correo válido',
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      ReactiveTextField(
-                        enableInteractiveSelection: true,
-                        enableSuggestions: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Teléfono',
-                          icon: Icon(Icons.short_text),
-                        ),
-                        formControlName: 'phone',
-                        validationMessages: {
-                          'required': (error) =>
-                              'El teléfono no puede estar vacío'
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      ReactiveTextField(
-                        enableInteractiveSelection: true,
-                        enableSuggestions: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Teléfono Auxiliar',
-                          icon: Icon(Icons.short_text),
-                        ),
-                        formControlName: 'auxiliarPhone',
-                        validationMessages: {
-                          'required': (error) =>
-                              'El teléfono auxiliar no puede estar vacío',
-                        },
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ReactiveTextField(
+                              enableInteractiveSelection: true,
+                              enableSuggestions: true,
+                              onChanged: (control) {
+                                var unformattedRut =
+                                    deFormatRut(control.value.toString());
+                                var formattedRut = formatRut(unformattedRut);
+                                setState(() {
+                                  formClient.control('rut').value =
+                                      formattedRut;
+                                });
+                              },
+                              decoration: const InputDecoration(
+                                labelText: 'Rut',
+                                icon: Icon(Icons.short_text),
+                              ),
+                              formControlName: 'rut',
+                              validationMessages: {
+                                'required': (error) =>
+                                    'El rut no puede estar vacío',
+                                'formatRut': (error) =>
+                                    'El rut ingresado no es válido',
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: ReactiveTextField(
+                              enableInteractiveSelection: true,
+                              enableSuggestions: true,
+                              onChanged: (control) {
+                                setState(() {
+                                  formClient.control('email').value =
+                                      control.value.toString().trim();
+                                });
+                              },
+                              decoration: const InputDecoration(
+                                labelText: 'Email',
+                                icon: Icon(Icons.short_text),
+                              ),
+                              formControlName: 'email',
+                              validationMessages: {
+                                'required': (error) =>
+                                    'El email no puede estar vacío',
+                                'email': (error) => 'Ingresa un correo válido',
+                              },
+                            ),
+                          ),
+                        ],
                       ),
 
                       const SizedBox(height: 16),
-                      ReactiveTextField(
-                        enableInteractiveSelection: true,
-                        enableSuggestions: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Ciudad',
-                          icon: Icon(Icons.short_text),
-                        ),
-                        formControlName: 'city',
-                        validationMessages: {
-                          'required': (error) =>
-                              'La ciudad no puede estar vacío',
-                          'minLength': (error) =>
-                              'Redacta un poco mejor la ciudad',
-                        },
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ReactiveTextField(
+                              enableInteractiveSelection: true,
+                              enableSuggestions: true,
+                              decoration: const InputDecoration(
+                                labelText: 'Teléfono',
+                                icon: Icon(Icons.short_text),
+                              ),
+                              formControlName: 'phone',
+                              validationMessages: {
+                                'required': (error) =>
+                                    'El teléfono no puede estar vacío'
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: ReactiveTextField(
+                              enableInteractiveSelection: true,
+                              enableSuggestions: true,
+                              decoration: const InputDecoration(
+                                labelText: 'Teléfono Auxiliar',
+                                icon: Icon(Icons.short_text),
+                              ),
+                              formControlName: 'auxiliarPhone',
+                              validationMessages: {
+                                'required': (error) =>
+                                    'El teléfono auxiliar no puede estar vacío',
+                              },
+                            ),
+                          ),
+                        ],
                       ),
+
                       const SizedBox(height: 16),
-                      ReactiveTextField(
-                        enableInteractiveSelection: true,
-                        enableSuggestions: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Comuna',
-                          icon: Icon(Icons.short_text),
-                        ),
-                        formControlName: 'comuna',
-                        validationMessages: {
-                          'required': (error) =>
-                              'La comuna no puede estar vacío',
-                          'minLength': (error) =>
-                              'Redacta un poco mejor la comuna',
-                        },
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ReactiveTextField(
+                              enableInteractiveSelection: true,
+                              enableSuggestions: true,
+                              decoration: const InputDecoration(
+                                labelText: 'Ciudad',
+                                icon: Icon(Icons.short_text),
+                              ),
+                              formControlName: 'city',
+                              validationMessages: {
+                                'required': (error) =>
+                                    'La ciudad no puede estar vacío',
+                                'minLength': (error) =>
+                                    'Redacta un poco mejor la ciudad',
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: ReactiveTextField(
+                              enableInteractiveSelection: true,
+                              enableSuggestions: true,
+                              decoration: const InputDecoration(
+                                labelText: 'Comuna',
+                                icon: Icon(Icons.short_text),
+                              ),
+                              formControlName: 'comuna',
+                              validationMessages: {
+                                'required': (error) =>
+                                    'La comuna no puede estar vacío',
+                                'minLength': (error) =>
+                                    'Redacta un poco mejor la comuna',
+                              },
+                            ),
+                          ),
+                        ],
                       ),
+
                       const SizedBox(height: 16),
                       ReactiveTextField(
                         enableInteractiveSelection: true,
@@ -330,8 +355,6 @@ class _ClientFormState extends State<ClientForm> {
                             validationMessages: {
                               'required': (error) =>
                                   'La fecha de nacimiento no puede estar vacío',
-                              'minLength': (error) =>
-                                  'Redacta un poco mejor la fecha de nacimiento',
                             },
                           );
                         },
@@ -348,9 +371,7 @@ class _ClientFormState extends State<ClientForm> {
                           );
                         },
                       ),*/
-                      ReactiveFormConsumer(builder: (context, _, __) {
-                        return Text(formClient.rawValue.toString());
-                      }),
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [

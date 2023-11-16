@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../models/client.dart';
-import '../../services/api_service.dart';
-import '../widgets/loading_widget.dart';
-import '../widgets/no_data_widget.dart';
+import '../../../models/client.dart';
+import '../../../services/api_service.dart';
+import '../../widgets/loading_widget.dart';
+import '../../widgets/no_data_widget.dart';
 import 'client_form.dart';
 
 class ClientsPage extends StatefulWidget {
