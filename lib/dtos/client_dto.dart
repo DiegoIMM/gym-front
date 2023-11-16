@@ -1,3 +1,6 @@
+import '../models/payment.dart';
+import '../models/plan.dart';
+
 class ClientDTO {
   bool enabled;
   String rut;
@@ -7,8 +10,8 @@ class ClientDTO {
   String auxiliarPhone;
   int idEmpresa;
   DateTime? expiredAt;
-  int? idPlan;
-  String? idPayment;
+  Plan? plan;
+  Payment? payment;
   String? address;
   String? comuna;
   String? city;
@@ -23,8 +26,8 @@ class ClientDTO {
     required this.auxiliarPhone,
     required this.idEmpresa,
     this.expiredAt,
-    this.idPlan,
-    this.idPayment,
+    this.plan,
+    this.payment,
     this.address,
     this.comuna,
     this.city,
@@ -43,7 +46,8 @@ class ClientDTO {
         'expiredAt': expiredAt,
         'name': name,
         'phone': phone,
-        'idPlan': idPlan,
+        'plan': plan?.toJson(),
+        'payment': payment?.toJson(),
         'idEmpresa': idEmpresa,
       };
 
@@ -61,8 +65,9 @@ class ClientDTO {
         expiredAt: json['expiredAt'],
         name: json['name'],
         phone: json['phone'],
-        idPlan: json['idPlan'],
-        idPayment: json['idPayment'],
+        plan: json['plan'] != null ? Plan.fromJson(json['plan']) : null,
+        payment:
+            json['payment'] != null ? Payment.fromJson(json['payment']) : null,
         idEmpresa: json['idEmpresa'],
       );
 }

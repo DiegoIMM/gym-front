@@ -97,7 +97,7 @@ class _ClientFormState extends State<ClientForm> {
                 validationMessage: 'No es un número de teléfono válido')
           ]),
       'idEmpresa': FormControl<int>(
-          value: widget.client != null ? widget.client!.idEmpresa : 2,
+          value: widget.client != null ? widget.client!.empresa.id : 2,
           validators: [
             Validators.required,
           ]),
@@ -377,7 +377,7 @@ class _ClientFormState extends State<ClientForm> {
                         children: [
                           ElevatedButton(
                             style: TextButton.styleFrom(
-                              backgroundColor: Colors.red.shade100,
+                              backgroundColor: Colors.red.shade200,
                             ),
                             child: const Text('Cancelar'),
                             onPressed: () {
@@ -387,29 +387,57 @@ class _ClientFormState extends State<ClientForm> {
                           const SizedBox(
                             width: 20,
                           ),
-                          ReactiveFormConsumer(builder: (context, _, __) {
-                            return ElevatedButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: Colors.green.shade100,
-                              ),
-                              onPressed: (isLoading || !formClient.valid)
-                                  ? null
-                                  : createClient,
-                              child: Row(children: [
-                                const Text('Crear'),
-                                isLoading
-                                    ? Container(
-                                        width: 16,
-                                        height: 16,
-                                        padding: const EdgeInsets.all(2.0),
-                                        child: const CircularProgressIndicator(
-                                          strokeWidth: 3,
-                                        ),
-                                      )
-                                    : Container(),
-                              ]),
-                            );
-                          })
+                          widget.client == null
+                              ? ReactiveFormConsumer(builder: (context, _, __) {
+                                  return ElevatedButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.green.shade200,
+                                    ),
+                                    onPressed: (isLoading || !formClient.valid)
+                                        ? null
+                                        : createClient,
+                                    child: Row(children: [
+                                      const Text('Crear'),
+                                      isLoading
+                                          ? Container(
+                                              width: 16,
+                                              height: 16,
+                                              padding:
+                                                  const EdgeInsets.all(2.0),
+                                              child:
+                                                  const CircularProgressIndicator(
+                                                strokeWidth: 3,
+                                              ),
+                                            )
+                                          : Container(),
+                                    ]),
+                                  );
+                                })
+                              : ReactiveFormConsumer(builder: (context, _, __) {
+                                  return ElevatedButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.yellow.shade200,
+                                    ),
+                                    onPressed: (isLoading || !formClient.valid)
+                                        ? null
+                                        : editClient,
+                                    child: Row(children: [
+                                      const Text('Editar'),
+                                      isLoading
+                                          ? Container(
+                                              width: 16,
+                                              height: 16,
+                                              padding:
+                                                  const EdgeInsets.all(2.0),
+                                              child:
+                                                  const CircularProgressIndicator(
+                                                strokeWidth: 3,
+                                              ),
+                                            )
+                                          : Container(),
+                                    ]),
+                                  );
+                                })
                         ],
                       ),
                     ],
@@ -437,6 +465,42 @@ class _ClientFormState extends State<ClientForm> {
         Provider.of<ScaffoldMessengerService>(context, listen: false)
             .showSnackBar(
           "Cliente creado correctamente",
+        );
+
+        //   Cerrar el dialogo
+        Navigator.of(context).pop(true);
+      }).catchError((error) {
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.toString()),
+          ),
+        );
+      });
+    } else {
+      print('Formulario invalido');
+      formClient.markAllAsTouched();
+    }
+  }
+
+  void editClient() {
+    if (formClient.valid) {
+      print(formClient.value);
+
+      //   setear el userId en el form
+      // form.control('userId').value = widget.userId;
+      print(
+          'Formulario enviado -> ${ClientDTO.fromJson(formClient.value).toJson()}');
+
+      setState(() {
+        isLoading = true;
+      });
+      apiService.editClient(ClientDTO.fromJson(formClient.value)).then((value) {
+        Provider.of<ScaffoldMessengerService>(context, listen: false)
+            .showSnackBar(
+          "Cliente editado correctamente",
         );
 
         //   Cerrar el dialogo

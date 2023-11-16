@@ -102,45 +102,45 @@ class _ClientsPageState extends State<ClientsPage> {
                                     children: [
                                       Expanded(
                                         child: DataTable(
-                                          columns: const <DataColumn>[
+                                          columns: <DataColumn>[
                                             DataColumn(
                                               label: Text(
                                                 'Nombre',
-                                                style: TextStyle(
-                                                    fontStyle:
-                                                        FontStyle.italic),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleMedium,
                                               ),
                                             ),
                                             DataColumn(
                                               label: Text(
                                                 'Teléfono',
-                                                style: TextStyle(
-                                                    fontStyle:
-                                                        FontStyle.italic),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleMedium,
                                               ),
                                             ),
                                             DataColumn(
                                               label: Text(
                                                 'Plan',
-                                                style: TextStyle(
-                                                    fontStyle:
-                                                        FontStyle.italic),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleMedium,
                                               ),
                                             ),
                                             DataColumn(
                                               label: Text(
-                                                'Fecha expiración',
-                                                style: TextStyle(
-                                                    fontStyle:
-                                                        FontStyle.italic),
+                                                'Correo',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleMedium,
                                               ),
                                             ),
                                             DataColumn(
                                               label: Text(
                                                 'Acciones',
-                                                style: TextStyle(
-                                                    fontStyle:
-                                                        FontStyle.italic),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleMedium,
                                               ),
                                             ),
                                           ],

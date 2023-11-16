@@ -271,4 +271,15 @@ class ApiService {
     });
     return jsonResult;
   }
+
+  Future<dynamic> editClient(ClientDTO clientDTO) async {
+    final response = await http.put(Uri.parse('${_apiUrl}client/update'),
+        body: jsonEncode(clientDTO.toJson()), headers: headers);
+
+    var jsonResult = await _handleResponse(response).catchError((error) {
+      print('Errorr: $error');
+      throw error;
+    });
+    return jsonResult;
+  }
 }

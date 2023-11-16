@@ -1,3 +1,4 @@
+import 'package:gym_front/models/company.dart';
 import 'package:gym_front/models/plan.dart';
 
 class Client {
@@ -7,7 +8,7 @@ class Client {
   String email;
   String phone;
   String auxiliarPhone;
-  int? idEmpresa;
+  Company empresa;
 
   String? city;
   String? comuna;
@@ -25,7 +26,7 @@ class Client {
     required this.email,
     required this.phone,
     required this.auxiliarPhone,
-    required this.idEmpresa,
+    required this.empresa,
     this.city,
     this.comuna,
     this.address,
@@ -54,7 +55,7 @@ class Client {
         phone: json['phone'],
         idPlan: json['idPlan'] == null ? 0 : int.parse(json['idPlan']),
         idPayment: json['idPayment'] == null ? 0 : int.parse(json['idPayment']),
-        idEmpresa: json['idEmpresa'] == null ? 0 : int.parse(json['idEmpresa']),
+        empresa: Company.fromJson(json['empresa']),
         plan: json['plan'] == null ? null : Plan.fromJson(json['plan']),
       );
 
@@ -78,7 +79,7 @@ class Client {
         'phone': phone,
         'idPlan': idPlan,
         'id_payment': idPayment,
-        'empresa_id': idEmpresa,
+        'empresa': empresa.toJson(),
         'plan': plan?.toJson() ?? '',
       };
 }
