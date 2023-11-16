@@ -4,6 +4,7 @@ import 'package:gym_front/dtos/payment_dto.dart';
 import 'package:http/http.dart' as http;
 
 import '../dtos/client_dto.dart';
+import '../dtos/edit_plan_dto.dart';
 import '../dtos/login_dto.dart';
 import '../dtos/plan_dto.dart';
 import '../dtos/set_new_pass_dto.dart';
@@ -207,6 +208,17 @@ class ApiService {
 
   Future<dynamic> createPlan(PlanDTO planDTO) async {
     final response = await http.post(Uri.parse('${_apiUrl}plan/insert'),
+        body: jsonEncode(planDTO.toJson()), headers: headers);
+
+    var jsonResult = await _handleResponse(response).catchError((error) {
+      print('Errorr: $error');
+      throw error;
+    });
+    return jsonResult;
+  }
+
+  Future<dynamic> editPlan(EditPlanDTO planDTO) async {
+    final response = await http.put(Uri.parse('${_apiUrl}plan/update'),
         body: jsonEncode(planDTO.toJson()), headers: headers);
 
     var jsonResult = await _handleResponse(response).catchError((error) {

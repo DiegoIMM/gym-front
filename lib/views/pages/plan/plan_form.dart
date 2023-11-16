@@ -5,6 +5,7 @@ import 'package:gym_front/dtos/plan_dto.dart';
 import 'package:provider/provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
+import '../../../dtos/edit_plan_dto.dart';
 import '../../../models/plan.dart';
 import '../../../services/api_service.dart';
 import '../../../services/scaffold_messenger_service.dart';
@@ -29,6 +30,8 @@ class _PlanFormState extends State<PlanForm> {
   initState() {
     super.initState();
     formPlan = FormGroup({
+      'id':
+          FormControl<int>(value: widget.plan != null ? widget.plan!.id : null),
       'enabled': FormControl<bool>(
           value: widget.plan != null ? widget.plan!.enabled : true,
           validators: [
@@ -212,7 +215,7 @@ class _PlanFormState extends State<PlanForm> {
                           children: [
                             ElevatedButton(
                               style: TextButton.styleFrom(
-                                backgroundColor: Colors.red.shade100,
+                                backgroundColor: Colors.red.shade200,
                               ),
                               child: const Text('Cancelar'),
                               onPressed: () {
@@ -222,30 +225,59 @@ class _PlanFormState extends State<PlanForm> {
                             const SizedBox(
                               width: 20,
                             ),
-                            ReactiveFormConsumer(builder: (context, _, __) {
-                              return ElevatedButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.green.shade100,
-                                ),
-                                onPressed: (isLoading || !formPlan.valid)
-                                    ? null
-                                    : createPlan,
-                                child: Row(children: [
-                                  const Text('Crear'),
-                                  isLoading
-                                      ? Container(
-                                          width: 16,
-                                          height: 16,
-                                          padding: const EdgeInsets.all(2.0),
-                                          child:
-                                              const CircularProgressIndicator(
-                                            strokeWidth: 3,
-                                          ),
-                                        )
-                                      : Container(),
-                                ]),
-                              );
-                            })
+                            widget.plan == null
+                                ? ReactiveFormConsumer(
+                                    builder: (context, _, __) {
+                                    return ElevatedButton(
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.green.shade200,
+                                      ),
+                                      onPressed: (isLoading || !formPlan.valid)
+                                          ? null
+                                          : createPlan,
+                                      child: Row(children: [
+                                        const Text('Crear'),
+                                        isLoading
+                                            ? Container(
+                                                width: 16,
+                                                height: 16,
+                                                padding:
+                                                    const EdgeInsets.all(2.0),
+                                                child:
+                                                    const CircularProgressIndicator(
+                                                  strokeWidth: 3,
+                                                ),
+                                              )
+                                            : Container(),
+                                      ]),
+                                    );
+                                  })
+                                : ReactiveFormConsumer(
+                                    builder: (context, _, __) {
+                                    return ElevatedButton(
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.yellow.shade200,
+                                      ),
+                                      onPressed: (isLoading || !formPlan.valid)
+                                          ? null
+                                          : editPlan,
+                                      child: Row(children: [
+                                        const Text('Editar'),
+                                        isLoading
+                                            ? Container(
+                                                width: 16,
+                                                height: 16,
+                                                padding:
+                                                    const EdgeInsets.all(2.0),
+                                                child:
+                                                    const CircularProgressIndicator(
+                                                  strokeWidth: 3,
+                                                ),
+                                              )
+                                            : Container(),
+                                      ]),
+                                    );
+                                  })
                           ],
                         ),
                       ],
@@ -269,6 +301,41 @@ class _PlanFormState extends State<PlanForm> {
         Provider.of<ScaffoldMessengerService>(context, listen: false)
             .showSnackBar(
           "Plan creado correctamente",
+        );
+
+        //   Cerrar el dialogo
+        Navigator.of(context).pop(true);
+      }).catchError((error) {
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.toString()),
+          ),
+        );
+      });
+    } else {
+      print('Formulario invalido');
+      formPlan.markAllAsTouched();
+    }
+  }
+
+  void editPlan() {
+    if (formPlan.valid) {
+      print(formPlan.value);
+      //   setear el userId en el form
+      // form.control('userId').value = widget.userId;
+      print(
+          'Formulario enviado -> ${EditPlanDTO.fromJson(formPlan.value).toJson()}');
+
+      setState(() {
+        isLoading = true;
+      });
+      apiService.editPlan(EditPlanDTO.fromJson(formPlan.value)).then((value) {
+        Provider.of<ScaffoldMessengerService>(context, listen: false)
+            .showSnackBar(
+          "Plan editado correctamente",
         );
 
         //   Cerrar el dialogo

@@ -468,6 +468,9 @@ class MyApp extends StatelessWidget {
             enableFeedback: true,
             backgroundColor: Colors.white,
             minimumSize: const Size(50, 40),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
             textStyle: const TextStyle(
               color: Colors.black,
             ),
@@ -480,6 +483,10 @@ class MyApp extends StatelessWidget {
             shadowColor: Colors.black,
             enableFeedback: true,
             minimumSize: const Size(50, 40),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+
             backgroundColor: Colors.green.shade50,
             // backgroundColor: Colors.lightGreen.shade100,
             textStyle: const TextStyle(

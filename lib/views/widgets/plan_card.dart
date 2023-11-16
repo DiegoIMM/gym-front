@@ -16,14 +16,30 @@ class PlanCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(plan.name, style: Theme.of(context).textTheme.headlineMedium),
-            Text(plan.description,
-                style: Theme.of(context).textTheme.bodyMedium),
-            Spacer(),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextButton(
+                Text(plan.name,
+                    style: Theme.of(context).textTheme.headlineMedium),
+                const Spacer(),
+                Chip(
+                    label: Text('Plan ${plan.period}'),
+                    backgroundColor: Colors.green.shade50),
+              ],
+            ),
+            Text(plan.description,
+                style: Theme.of(context).textTheme.labelSmall),
+            const Spacer(),
+            Row(
+              children: [
+                // Ingresar precio y parsear a moneda
+                Text(
+                    '\$${plan.price.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}',
+                    style: const TextStyle(
+                        color: Colors.green,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold)),
+                const Spacer(),
+                OutlinedButton(
                     onPressed: () async {
                       var result = await showDialog<dynamic>(
                         context: context,
