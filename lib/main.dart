@@ -9,6 +9,7 @@ import 'package:gym_front/views/pages/auth/sign_up_page.dart';
 import 'package:gym_front/views/pages/auth/validate_account_page.dart';
 import 'package:gym_front/views/pages/auth/validate_email_page.dart';
 import 'package:gym_front/views/pages/client/clients_page.dart';
+import 'package:gym_front/views/pages/entering/entering_page.dart';
 import 'package:gym_front/views/pages/home_page.dart';
 import 'package:gym_front/views/pages/payment/payment_page.dart';
 import 'package:gym_front/views/pages/plan/plans_page.dart';
@@ -88,6 +89,10 @@ final _router = GoRouter(
         GoRoute(
           path: '/inicio',
           builder: (context, state) => const Material(child: HomePage()),
+        ),
+        GoRoute(
+          path: '/ingreso',
+          builder: (context, state) => const Material(child: EnteringPage()),
         ),
         GoRoute(
           path: '/planes',

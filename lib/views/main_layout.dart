@@ -86,6 +86,20 @@ class MainLayout extends StatelessWidget {
                     onTap: () => context.read<AuthService>().logout(),
                   )
                 : Container(),
+
+            const SizedBox(
+              height: 10,
+            ),
+            Center(
+                child: Text('Consultar',
+                    style: Theme.of(context).textTheme.labelLarge)),
+            const Divider(),
+            ListTile(
+                title: const Text('Ingresos'),
+                selected: GoRouterState.of(context).fullPath == '/ingreso',
+                onTap: () {
+                  context.go('/ingreso');
+                }),
             const SizedBox(
               height: 10,
             ),
@@ -93,6 +107,7 @@ class MainLayout extends StatelessWidget {
                 child: Text('Inicio',
                     style: Theme.of(context).textTheme.labelLarge)),
             const Divider(),
+
             ListTile(
                 title: const Text('Inicio'),
                 selected: GoRouterState.of(context).fullPath == '/inicio',
