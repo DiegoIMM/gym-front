@@ -35,6 +35,7 @@ class _ClientFormState extends State<ClientForm> {
             Validators.required,
           ]),
       'rut': FormControl<String>(
+          disabled: widget.client != null,
           value: widget.client != null
               ? widget.client!.rut
               : kDebugMode
