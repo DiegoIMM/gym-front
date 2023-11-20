@@ -67,7 +67,7 @@ class ApiService {
   Future<dynamic> login(LoginDTO loginDTO) async {
     print('login');
 
-    final response = await http.post(Uri.parse('${_authUrl}login'),
+    final response = await http.post(Uri.parse('${_authUrl}login/'),
         body: jsonEncode(loginDTO.toJson()), headers: headers);
 
     await _handleResponse(response).catchError((error) {

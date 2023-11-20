@@ -161,11 +161,56 @@ class _PlanPageState extends State<PaymentPage> {
                                                     '${payment.client.name} ${payment.client.rut}')),
                                                 DataCell(
                                                     Text(payment.plan.name)),
-                                                DataCell(Text(payment.expiredAt
-                                                    .toString()
-                                                    .substring(0, 10))),
+                                                DataCell(Tooltip(
+                                                  // mostrar cuanto falta para expirar en lenguaje humano
+                                                  message: payment.expiredAt
+                                                              .difference(
+                                                                  DateTime
+                                                                      .now())
+                                                              .inDays <
+                                                          0
+                                                      ? 'Expirado'
+                                                      : payment.expiredAt
+                                                                  .difference(
+                                                                      DateTime
+                                                                          .now())
+                                                                  .inDays <
+                                                              1
+                                                          ? 'Expira hoy'
+                                                          : payment.expiredAt
+                                                                      .difference(
+                                                                          DateTime
+                                                                              .now())
+                                                                      .inDays <
+                                                                  2
+                                                              ? 'Expira mañana'
+                                                              : 'Expira en ${payment.expiredAt.difference(DateTime.now()).inDays} dias',
+                                                  child: Text(
+                                                    payment.expiredAt
+                                                        .toString()
+                                                        .substring(0, 10),
+                                                    style: TextStyle(
+                                                      //Si esta expirado, mostrar en rojo, si le falta menos de 15 dias en naranjo, y si no en verde
+                                                      color: payment.expiredAt
+                                                                  .difference(
+                                                                      DateTime
+                                                                          .now())
+                                                                  .inDays <
+                                                              15
+                                                          ? Colors.orange
+                                                          : payment.expiredAt
+                                                                      .difference(
+                                                                          DateTime
+                                                                              .now())
+                                                                      .inDays <
+                                                                  0
+                                                              ? Colors.red
+                                                              : Colors.green,
+                                                    ),
+                                                  ),
+                                                )),
                                                 DataCell(Text(
-                                                    payment.price.toString())),
+                                                    '\$${payment.price.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}')),
                                               ],
                                             ),
                                         ],
