@@ -250,6 +250,17 @@ class ApiService {
     return Plan.fromJsonList(jsonResult);
   }
 
+  Future<List<Plan>> getAllPlans() async {
+    final response =
+        await http.get(Uri.parse('${_apiUrl}plan/all'), headers: headers);
+
+    var jsonResult = await _handleResponse(response).catchError((error) {
+      throw error;
+    });
+
+    return Plan.fromJsonList(jsonResult);
+  }
+
   Future<List<Payment>> getAllActivePayments() async {
     final response =
         await http.get(Uri.parse('${_apiUrl}payment/all'), headers: headers);

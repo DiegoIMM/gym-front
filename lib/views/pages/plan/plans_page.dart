@@ -27,90 +27,90 @@ class _PlanPageState extends State<PlanPage> {
 
   void getPlans() {
     setState(() {
-      futurePlans = apiService.getAllActivePlans();
+      futurePlans = apiService.getAllPlans();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Planes',
-                style: Theme.of(context).textTheme.displayMedium,
-              ),
-              ElevatedButton(
-                  onPressed: () async {
-                    var result = await showDialog<dynamic>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const PlanForm();
-                      },
-                    );
-                    if (result) {
-                      getPlans();
+    return SingleChildScrollView(
+      child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Planes',
+                  style: Theme.of(context).textTheme.displayMedium,
+                ),
+                ElevatedButton(
+                    onPressed: () async {
+                      var result = await showDialog<dynamic>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const PlanForm();
+                        },
+                      );
+                      if (result) {
+                        getPlans();
+                      }
+                    },
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.add,
+                          color: Colors.purple,
+                        ),
+                        Text('Crear Plan',
+                            style: TextStyle(color: Colors.purple)),
+                      ],
+                    ))
+              ],
+            ),
+            FutureBuilder(
+              future: futurePlans,
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                    return const Text('No hay conexión al servidor');
+                  case ConnectionState.active:
+                  case ConnectionState.waiting:
+                    return LoadingWidget(text: 'Cargando preguntas');
+                  case ConnectionState.done:
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
                     }
-                  },
-                  child: const Row(
-                    children: [
-                      Icon(
-                        Icons.add,
-                        color: Colors.purple,
-                      ),
-                      Text('Crear Plan',
-                          style: TextStyle(color: Colors.purple)),
-                    ],
-                  ))
-            ],
-          ),
-          FutureBuilder(
-            future: futurePlans,
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                  return const Text('No hay conexión al servidor');
-                case ConnectionState.active:
-                case ConnectionState.waiting:
-                  return LoadingWidget(text: 'Cargando preguntas');
-                case ConnectionState.done:
-                  if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  }
 
-                  if (!snapshot.hasData) {
-                    return NoData();
-                  }
+                    if (!snapshot.hasData) {
+                      return NoData();
+                    }
 
-                  if (snapshot.hasData) {
-                    var width = MediaQuery.of(context).size.width;
-                    var plans = snapshot.data!;
+                    if (snapshot.hasData) {
+                      var width = MediaQuery.of(context).size.width;
+                      var plans = snapshot.data!;
 
-                    return plans.isEmpty
-                        ? NoData()
-                        : SingleChildScrollView(
-                            child:
-                                //Hacer un grid con dos columnas, que se muestren las cards de planes con una altura fija
-                                //y que se vayan acomodando en el grid
-
-                                GridView.count(
-                                    crossAxisCount: 2,
-                                    childAspectRatio: (width / 2) / 200,
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    children: plans.map((plan) {
-                                      return PlanCard(plan: plan);
-                                    }).toList()));
-                  } else {
-                    return const Text('No hay datos');
-                  }
-              }
-            },
-          ),
-        ]));
+                      return plans.isEmpty
+                          ? NoData()
+                          : GridView.builder(
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: width < 1200 ? 1 : 2,
+                                      childAspectRatio: 3,
+                                      crossAxisSpacing: 10,
+                                      mainAxisSpacing: 10),
+                              itemCount: plans.length,
+                              itemBuilder: (context, index) {
+                                return PlanCard(plan: plans[index]);
+                              });
+                    } else {
+                      return const Text('No hay datos');
+                    }
+                }
+              },
+            ),
+          ])),
+    );
   }
 }

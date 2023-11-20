@@ -22,8 +22,11 @@ class PlanCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineMedium),
                 const Spacer(),
                 Chip(
-                    label: Text('Plan ${plan.period}'),
-                    backgroundColor: Colors.green.shade50),
+                  label: Text('Plan ${plan.period}'),
+                  backgroundColor: plan.enabled
+                      ? Colors.green.shade100
+                      : Colors.red.shade100,
+                ),
               ],
             ),
             Text(plan.description,
