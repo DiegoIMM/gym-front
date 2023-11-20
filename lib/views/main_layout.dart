@@ -35,12 +35,12 @@ class MainLayout extends StatelessWidget {
                 child: Text('Autenticación',
                     style: Theme.of(context).textTheme.labelLarge)),
             const Divider(),
-            context.watch<AuthService>().isAuthenticated
-                ? Container()
-                : ListTile(
-                    title: const Text('Registrarse'),
-                    onTap: () => context.go('/auth/register'),
-                  ),
+            // context.watch<AuthService>().isAuthenticated
+            //     ? Container()
+            //     : ListTile(
+            //         title: const Text('Registrarse'),
+            //         onTap: () => context.go('/auth/register'),
+            //       ),
             context.watch<AuthService>().isAuthenticated
                 ? Container()
                 : ListTile(

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -22,10 +21,9 @@ class _LogInPageState extends State<LogInPage> {
 
   final form = FormGroup({
     'email': FormControl<String>(
-        value: kDebugMode ? 'diegomartinezpavez@icloud.com' : '',
-        validators: [Validators.required, Validators.email]),
-    'password': FormControl<String>(
-        value: kDebugMode ? 'q1w2e3r4' : '', validators: [Validators.required]),
+        value: '', validators: [Validators.required, Validators.email]),
+    'password':
+        FormControl<String>(value: '', validators: [Validators.required]),
   });
 
   @override
@@ -40,12 +38,12 @@ class _LogInPageState extends State<LogInPage> {
                   child: ListView(
                     children: <Widget>[
                       const Icon(
-                        Icons.gavel_rounded,
+                        Icons.fitness_center_rounded,
                         size: 100,
                       ),
                       const Center(
                         child: Text(
-                          'Bienvenido a Gym',
+                          'Bienvenido a Planeta Fitness',
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.w900,
