@@ -38,12 +38,12 @@ class ApiService {
     print('status code: ${response.statusCode}');
     print('response body ->: ${response.body}');
 
-    var decodedData = json.decode(utf8.decode(response.bodyBytes));
-    print('decodedData: $decodedData');
     switch (response.statusCode) {
       case 200 || 201:
+        var decodedData = json.decode(utf8.decode(response.bodyBytes));
+        print('decodedData: $decodedData');
         print('response body ->: ${response.body}');
-        print('response body ->: ${utf8.decode(response.bodyBytes)}');
+        print('response body2 ->: ${utf8.decode(response.bodyBytes)}');
         print('entro al 20* con el body: $decodedData');
         print('decodedData: $decodedData');
         return decodedData;
@@ -53,8 +53,10 @@ class ApiService {
         // No hay token, es invalido o hay un error de seguridad
         throw 'No tienes permiso para realizar esta acción';
       case 403:
+        var decodedData = json.decode(utf8.decode(response.bodyBytes));
+        print('decodedData: $decodedData');
         // Esta to do bien pero no por logica el usuario no deberia estar haciendo esto
-        throw decodedData['message'];
+        throw decodedData;
       case 404:
         throw 'No se encontró el recurso que buscas';
       case 500:
@@ -304,5 +306,17 @@ class ApiService {
       throw error;
     });
     return jsonResult;
+  }
+
+  Future<Client> getClientByRut(String rut) async {
+    // TODO: Reemplazar a endpoint que usa empresas para buscar los clientes filtrados
+    final response =
+        await http.get(Uri.parse('${_apiUrl}client/$rut'), headers: headers);
+
+    var jsonResult = await _handleResponse(response).catchError((error) {
+      throw error;
+    });
+
+    return Client.fromJson(jsonResult);
   }
 }

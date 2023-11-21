@@ -109,6 +109,14 @@ class _ClientsPageState extends State<ClientsPage> {
                                             child: DataTable(
                                               columns: const <DataColumn>[
                                                 DataColumn(
+                                                  label: Text('Rut',
+                                                      style: TextStyle(
+                                                        fontSize: 24,
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                      )),
+                                                ),
+                                                DataColumn(
                                                   label: Text('Nombre',
                                                       style: TextStyle(
                                                         fontSize: 24,
@@ -153,6 +161,8 @@ class _ClientsPageState extends State<ClientsPage> {
                                                 for (var client in clients)
                                                   DataRow(
                                                     cells: <DataCell>[
+                                                      DataCell(
+                                                          Text(client.rut)),
                                                       DataCell(
                                                           Text(client.name)),
                                                       DataCell(

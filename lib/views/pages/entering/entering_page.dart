@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gym_front/models/client.dart';
 import 'package:gym_front/services/api_service.dart';
+import 'package:provider/provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rut_utils/rut_utils.dart';
+
+import '../../../services/scaffold_messenger_service.dart';
 
 class EnteringPage extends StatefulWidget {
   const EnteringPage({super.key});
@@ -12,7 +15,7 @@ class EnteringPage extends StatefulWidget {
 }
 
 class _EnteringPageState extends State<EnteringPage> {
-  late Future<List<Client>> futureClients;
+  Client? client;
 
   static var apiService = ApiService();
   bool isLoading = false;
@@ -20,13 +23,6 @@ class _EnteringPageState extends State<EnteringPage> {
   @override
   void initState() {
     super.initState();
-    getClients();
-  }
-
-  void getClients() {
-    setState(() {
-      futureClients = apiService.getClientsByEnterprise();
-    });
   }
 
   var formClient = FormGroup({
@@ -107,7 +103,12 @@ class _EnteringPageState extends State<EnteringPage> {
                           ),
                           child: const Text('Limpiar resultados'),
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            setState(() {
+                              client = null;
+                              formClient.control('rut').value = '';
+                              formClient.clearValidators();
+                              formClient.markAsUntouched();
+                            });
                           },
                         ),
                         const SizedBox(
@@ -140,38 +141,87 @@ class _EnteringPageState extends State<EnteringPage> {
                     ),
                   ],
                 )),
-            Text('Resultado aquí')
+            client != null
+                ? Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          client!.expiredAt == null
+                              ? const Text('Sin plan contratado')
+                              : Tooltip(
+                                  // mostrar cuanto falta para expirar en lenguaje humano
+                                  message: client!.expiredAt!
+                                              .difference(DateTime.now())
+                                              .inDays <
+                                          0
+                                      ? 'Expirado'
+                                      : client!.expiredAt!
+                                                  .difference(DateTime.now())
+                                                  .inDays <
+                                              1
+                                          ? 'Expira hoy'
+                                          : client!.expiredAt!
+                                                      .difference(
+                                                          DateTime.now())
+                                                      .inDays <
+                                                  2
+                                              ? 'Expira mañana'
+                                              : 'Expira en ${client?.expiredAt?.difference(DateTime.now()).inDays} dias',
+                                  child: Text(client!.expiredAt!
+                                      .toString()
+                                      .substring(0, 10))),
+                          Text('Cliente: ${client?.name}'),
+                          Text('Rut: ${client?.rut}'),
+                          Text('Correo: ${client?.email}'),
+                          Text('Teléfono: ${client?.phone}'),
+                          Text('Plan: ${client?.plan?.name ?? 'Sin plan'}'),
+                          Text('Ciudad: ${client?.city}'),
+                          Text(
+                              'Fecha nacimiento: ${client?.birthDate?.toString().substring(0, 10) ?? 'Sin fecha'}'),
+                          Text('Dirección: ${client?.address}'),
+                          Text(
+                              'Expira: ${client?.expiredAt?.toString().substring(0, 10) ?? 'Sin fecha'}'),
+                        ],
+                      ),
+                    ),
+                  )
+                : const Text('Ingrese un rut para consultar'),
           ])),
     );
   }
 
   void getClient() {
+    setState(() {
+      isLoading = true;
+    });
     if (formClient.valid) {
       print(formClient.value);
+      print(formClient.value['rut'].toString());
 
-      setState(() {
-        isLoading = true;
+      apiService
+          .getClientByRut(formClient.value['rut'].toString())
+          .then((value) {
+        Provider.of<ScaffoldMessengerService>(context, listen: false)
+            .showSnackBar(
+          "Cliente consultado correctamente",
+        );
+
+        print('value: $value');
+        setState(() {
+          isLoading = false;
+          client = value;
+        });
+      }).catchError((error) {
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.toString()),
+          ),
+        );
       });
-      // apiService
-      //     .createClient(ClientDTO.fromJson(formClient.value))
-      //     .then((value) {
-      //   Provider.of<ScaffoldMessengerService>(context, listen: false)
-      //       .showSnackBar(
-      //     "Cliente creado correctamente",
-      //   );
-      //
-      //   //   Cerrar el dialogo
-      //   Navigator.of(context).pop(true);
-      // }).catchError((error) {
-      //   setState(() {
-      //     isLoading = false;
-      //   });
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(
-      //       content: Text(error.toString()),
-      //     ),
-      //   );
-      // });
     } else {
       print('Formulario invalido');
       formClient.markAllAsTouched();
