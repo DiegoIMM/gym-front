@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_front/models/client.dart';
 import 'package:gym_front/services/api_service.dart';
+import 'package:gym_front/views/widgets/plan_card.dart';
 import 'package:provider/provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:rut_utils/rut_utils.dart';
@@ -26,22 +27,22 @@ class _EnteringPageState extends State<EnteringPage> {
   }
 
   var formClient = FormGroup({
-    'rut': FormControl<String>(value: '', validators: [
+    'rut': FormControl<String>(value: '11111111-1', validators: [
       Validators.required,
       Validators.delegate((control) {
         final rut = control.value;
         // retornar error si el rut tiene un caracter distinto a un numero o una letra k
-        if (!rut.contains(RegExp(r'[^0-9kK]'))) {
-          return {'formatRut': true};
-        }
-
-        if (rut.isEmpty) {
-          return null;
-        }
-        if (!isRutValid(rut)) {
-          return {'formatRut': true};
-        }
-        return null;
+        // if (!rut.contains(RegExp(r'[^0-9kK]'))) {
+        //   return {'formatRut': true};
+        // }
+        //
+        // if (rut.isEmpty) {
+        //   return null;
+        // }
+        // if (!isRutValid(rut)) {
+        //   return {'formatRut': true};
+        // }
+        // return null;
       }),
     ]),
     'idEmpresa': FormControl<int>(value: 2, validators: [
@@ -142,49 +143,118 @@ class _EnteringPageState extends State<EnteringPage> {
                   ],
                 )),
             client != null
-                ? Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          client!.expiredAt == null
-                              ? const Text('Sin plan contratado')
-                              : Tooltip(
-                                  // mostrar cuanto falta para expirar en lenguaje humano
-                                  message: client!.expiredAt!
+                ? Row(
+                    children: [
+                      Expanded(
+                        child: Card(
+                          surfaceTintColor: client!.expiredAt == null
+                              ? Colors.red
+                              : client!.expiredAt!
+                                          .difference(DateTime.now())
+                                          .inDays <
+                                      15
+                                  ? Colors.orange
+                                  : client!.expiredAt!
                                               .difference(DateTime.now())
                                               .inDays <
                                           0
-                                      ? 'Expirado'
-                                      : client!.expiredAt!
-                                                  .difference(DateTime.now())
-                                                  .inDays <
-                                              1
-                                          ? 'Expira hoy'
-                                          : client!.expiredAt!
-                                                      .difference(
-                                                          DateTime.now())
-                                                      .inDays <
-                                                  2
-                                              ? 'Expira mañana'
-                                              : 'Expira en ${client?.expiredAt?.difference(DateTime.now()).inDays} dias',
-                                  child: Text(client!.expiredAt!
-                                      .toString()
-                                      .substring(0, 10))),
-                          Text('Cliente: ${client?.name}'),
-                          Text('Rut: ${client?.rut}'),
-                          Text('Correo: ${client?.email}'),
-                          Text('Teléfono: ${client?.phone}'),
-                          Text('Plan: ${client?.plan?.name ?? 'Sin plan'}'),
-                          Text('Ciudad: ${client?.city}'),
-                          Text(
-                              'Fecha nacimiento: ${client?.birthDate?.toString().substring(0, 10) ?? 'Sin fecha'}'),
-                          Text('Dirección: ${client?.address}'),
-                          Text(
-                              'Expira: ${client?.expiredAt?.toString().substring(0, 10) ?? 'Sin fecha'}'),
-                        ],
+                                      ? Colors.red
+                                      : Colors.green,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                client!.expiredAt == null
+                                    ? const Text('Sin plan contratado')
+                                    : Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('${client?.name}',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .displayLarge),
+                                          Tooltip(
+                                            // mostrar cuanto falta para expirar en lenguaje humano
+                                            message: client!.expiredAt!
+                                                        .difference(
+                                                            DateTime.now())
+                                                        .inDays <
+                                                    0
+                                                ? 'Expirado'
+                                                : client!.expiredAt!
+                                                            .difference(
+                                                                DateTime.now())
+                                                            .inDays <
+                                                        1
+                                                    ? 'Expira hoy'
+                                                    : client!.expiredAt!
+                                                                .difference(
+                                                                    DateTime
+                                                                        .now())
+                                                                .inDays <
+                                                            2
+                                                        ? 'Expira mañana'
+                                                        : 'Expira en ${client!.expiredAt?.difference(DateTime.now()).inDays} dias',
+                                            child: Text(
+                                              client!.expiredAt
+                                                  .toString()
+                                                  .substring(0, 10),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 40,
+                                                //Si esta expirado, mostrar en rojo, si le falta menos de 15 dias en naranjo, y si no en verde
+                                                color: client!.expiredAt!
+                                                            .difference(
+                                                                DateTime.now())
+                                                            .inDays <
+                                                        15
+                                                    ? Colors.orange
+                                                    : client!.expiredAt!
+                                                                .difference(
+                                                                    DateTime
+                                                                        .now())
+                                                                .inDays <
+                                                            0
+                                                        ? Colors.red
+                                                        : Colors.green,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                const Divider(),
+                                Row(
+                                  children: [
+                                    Text('Rut: ',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium),
+                                    Text('${client?.rut}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Text('Correo: ${client?.email}'),
+                                Text('Teléfono: ${client?.phone}'),
+                                Text(
+                                    'Fecha nacimiento: ${client?.birthDate?.toString().substring(0, 10) ?? 'Sin fecha'}'),
+                                Text('Ciudad: ${client?.city}'),
+                                Text('Dirección: ${client?.address}'),
+                                client!.plan != null
+                                    ? SizedBox(
+                                        height: 200,
+                                        child: PlanCard(plan: client!.plan!))
+                                    : const Text('Sin plan'),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   )
                 : const Text('Ingrese un rut para consultar'),
           ])),

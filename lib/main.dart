@@ -429,8 +429,8 @@ class MyApp extends StatelessWidget {
             borderRadius: BorderRadius.zero,
           ),
         ),
-        scaffoldBackgroundColor: Colors.purple.shade50,
-        canvasColor: Colors.purple.shade50,
+        // scaffoldBackgroundColor: Colors.purple.shade50,
+        // canvasColor: Colors.purple.shade50,
         listTileTheme: ListTileThemeData(
           selectedColor: Colors.green.shade700,
           selectedTileColor: Colors.green.shade50,
