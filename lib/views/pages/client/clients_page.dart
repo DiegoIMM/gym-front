@@ -172,12 +172,44 @@ class _ClientsPageState extends State<ClientsPage> {
                                                               ? client
                                                                   .plan!.name
                                                               : 'Sin plan')),
-                                                      DataCell(Text(client
-                                                              .expiredAt
-                                                              ?.toString()
-                                                              .substring(
-                                                                  0, 10) ??
-                                                          'Sin fecha')),
+                                                      DataCell(
+                                                          client.expiredAt !=
+                                                                  null
+                                                              ? Tooltip(
+                                                                  // mostrar cuanto falta para expirar en lenguaje humano
+                                                                  message: client
+                                                                              .expiredAt!
+                                                                              .difference(DateTime.now())
+                                                                              .inDays <
+                                                                          0
+                                                                      ? 'Expirado'
+                                                                      : client.expiredAt!.difference(DateTime.now()).inDays < 1
+                                                                          ? 'Expira hoy'
+                                                                          : client.expiredAt!.difference(DateTime.now()).inDays < 2
+                                                                              ? 'Expira mañana'
+                                                                              : 'Expira en ${client.expiredAt!.difference(DateTime.now()).inDays} dias',
+                                                                  child: Text(
+                                                                    client
+                                                                        .expiredAt
+                                                                        .toString()
+                                                                        .substring(
+                                                                            0,
+                                                                            10),
+                                                                    style:
+                                                                        TextStyle(
+                                                                      //Si esta expirado, mostrar en rojo, si le falta menos de 15 dias en naranjo, y si no en verde
+                                                                      color: client.expiredAt!.difference(DateTime.now()).inDays <
+                                                                              15
+                                                                          ? Colors
+                                                                              .orange
+                                                                          : client.expiredAt!.difference(DateTime.now()).inDays < 0
+                                                                              ? Colors.red
+                                                                              : Colors.green,
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              : const Text(
+                                                                  'Sin plan')),
                                                       DataCell(
                                                         Row(
                                                           children: [

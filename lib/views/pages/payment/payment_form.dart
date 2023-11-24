@@ -39,11 +39,9 @@ class _PaymentFormState extends State<PaymentForm> {
           validators: [
             Validators.required,
           ]),
-      'idEmpresa': FormControl<int>(
-          value: widget.payment != null ? widget.payment!.idEmpresa : 2,
-          validators: [
-            Validators.required,
-          ]),
+      'idEmpresa': FormControl<int>(value: 2, validators: [
+        Validators.required,
+      ]),
       'idPlan': FormControl<int>(
           value: widget.payment != null ? widget.payment!.id : 0,
           validators: [

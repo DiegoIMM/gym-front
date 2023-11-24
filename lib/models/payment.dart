@@ -9,7 +9,6 @@ class Payment {
   final String typeOfPayment;
   final Plan plan;
   final Client client;
-  final int? idEmpresa;
 
   Payment({
     required this.id,
@@ -19,7 +18,6 @@ class Payment {
     required this.typeOfPayment,
     required this.plan,
     required this.client,
-    this.idEmpresa,
   });
 
   factory Payment.fromJson(Map<String, dynamic> json) {
@@ -31,7 +29,6 @@ class Payment {
       typeOfPayment: json['typeOfPayment'],
       plan: Plan.fromJson(json['plan']),
       client: Client.fromJson(json['client']),
-      idEmpresa: json['idEmpresa'] ?? 0,
     );
   }
 
@@ -49,6 +46,5 @@ class Payment {
         'typeOfPayment': typeOfPayment,
         'plan': plan.toJson(),
         'client': client.toJson(),
-        'idEmpresa': idEmpresa ?? 0,
       };
 }
