@@ -8,7 +8,7 @@ class Client {
   String email;
   String phone;
   String auxiliarPhone;
-  Company empresa;
+  Company? empresa;
 
   String? city;
   String? comuna;
@@ -38,24 +38,25 @@ class Client {
   });
 
   factory Client.fromJson(Map<String, dynamic> json) => Client(
+        enabled: json['enabled'],
         rut: json['rut'],
+        name: json['name'],
+        email: json['email'],
+        phone: json['phone'],
         address: json['address'],
+        auxiliarPhone: json['auxiliarPhone'],
+        empresa:
+            json['empresa'] != null ? Company.fromJson(json['empresa']) : null,
         comuna: json['comuna'],
         city: json['city'],
-        auxiliarPhone: json['auxiliarPhone'],
         birthDate: json['birthDate'] != null
             ? DateTime.parse(json['birthDate'].toString())
             : null,
-        email: json['email'],
-        enabled: json['enabled'],
         expiredAt: json['expiredAt'] != null
             ? DateTime.parse(json['expiredAt'].toString())
             : null,
-        name: json['name'],
-        phone: json['phone'],
         idPlan: json['idPlan'] == null ? 0 : int.parse(json['idPlan']),
         idPayment: json['idPayment'] == null ? 0 : int.parse(json['idPayment']),
-        empresa: Company.fromJson(json['empresa']),
         plan: json['plan'] == null ? null : Plan.fromJson(json['plan']),
       );
 
@@ -79,7 +80,7 @@ class Client {
         'phone': phone,
         'idPlan': idPlan,
         'id_payment': idPayment,
-        'empresa': empresa.toJson(),
+        'empresa': empresa?.toJson() ?? '',
         'plan': plan?.toJson() ?? '',
       };
 }

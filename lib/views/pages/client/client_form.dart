@@ -98,7 +98,7 @@ class _ClientFormState extends State<ClientForm> {
                 validationMessage: 'No es un número de teléfono válido')
           ]),
       'idEmpresa': FormControl<int>(
-          value: widget.client != null ? widget.client!.empresa.id : 2,
+          value: widget.client != null ? widget.client!.empresa!.id : 2,
           validators: [
             Validators.required,
           ]),
@@ -488,17 +488,19 @@ class _ClientFormState extends State<ClientForm> {
 
   void editClient() {
     if (formClient.valid) {
-      print(formClient.value);
+      print(formClient.rawValue);
 
       //   setear el userId en el form
       // form.control('userId').value = widget.userId;
       print(
-          'Formulario enviado -> ${ClientDTO.fromJson(formClient.value).toJson()}');
+          'Formulario enviado -> ${ClientDTO.fromJson(formClient.rawValue).toJson()}');
 
       setState(() {
         isLoading = true;
       });
-      apiService.editClient(ClientDTO.fromJson(formClient.value)).then((value) {
+      apiService
+          .editClient(ClientDTO.fromJson(formClient.rawValue))
+          .then((value) {
         Provider.of<ScaffoldMessengerService>(context, listen: false)
             .showSnackBar(
           "Cliente editado correctamente",

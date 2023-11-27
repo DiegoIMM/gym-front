@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_front/models/client.dart';
 import 'package:provider/provider.dart';
+import 'package:reactive_dropdown_search/reactive_dropdown_search.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 import '../../../dtos/payment_dto.dart';
@@ -148,20 +149,64 @@ class _PaymentFormState extends State<PaymentForm> {
                         ),
                         Row(
                           children: [
+                            // Expanded(
+                            //   child: ReactiveDropdownField(
+                            //       formControlName: 'rutClient',
+                            //       hint: const Text('Rut Cliente'),
+                            //       onChanged: (value) {
+                            //         calculateExpiredAt();
+                            //       },
+                            //       items: allClients
+                            //           .map((client) => DropdownMenuItem(
+                            //                 value: client.rut,
+                            //                 child: Text(
+                            //                     '${client.rut} - ${client.name}'),
+                            //               ))
+                            //           .toList()),
+                            // ),
                             Expanded(
-                              child: ReactiveDropdownField(
-                                  formControlName: 'rutClient',
-                                  hint: const Text('Rut Cliente'),
-                                  onChanged: (value) {
-                                    calculateExpiredAt();
-                                  },
-                                  items: allClients
-                                      .map((client) => DropdownMenuItem(
-                                            value: client.rut,
-                                            child: Text(
-                                                '${client.rut} - ${client.name}'),
-                                          ))
-                                      .toList()),
+                              child: ReactiveDropdownSearch<String, String>(
+                                formControlName: 'rutClient',
+                                dropdownDecoratorProps:
+                                    const DropDownDecoratorProps(
+                                  dropdownSearchDecoration: InputDecoration(
+                                    hintText: "Selecciona un cliente",
+                                    helperText: 'A',
+                                    labelText: "B",
+                                    contentPadding:
+                                        EdgeInsets.fromLTRB(12, 12, 0, 0),
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                                popupProps: PopupProps.dialog(
+                                  isFilterOnline: true,
+                                  showSearchBox: true,
+                                  showSelectedItems: true,
+                                  dialogProps: DialogProps(
+                                    actions: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: ElevatedButton(
+                                          style: TextButton.styleFrom(
+                                            backgroundColor:
+                                                Colors.red.shade100,
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('Cerrar'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  searchDelay: Duration.zero,
+                                  emptyBuilder: (context, text) => Center(
+                                    child: Text("No hay resultados para $text"),
+                                  ),
+                                ),
+                                showClearButton: true,
+                                items: allClients.map((e) => e.rut).toList(),
+                              ),
                             ),
                             Expanded(
                               child: ReactiveDropdownField(
