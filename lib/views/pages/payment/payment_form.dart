@@ -5,15 +5,12 @@ import 'package:reactive_dropdown_search/reactive_dropdown_search.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 import '../../../dtos/payment_dto.dart';
-import '../../../models/payment.dart';
 import '../../../models/plan.dart';
 import '../../../services/api_service.dart';
 import '../../../services/scaffold_messenger_service.dart';
 
 class PaymentForm extends StatefulWidget {
-  const PaymentForm({super.key, this.payment});
-
-  final Payment? payment;
+  const PaymentForm({super.key});
 
   @override
   State<PaymentForm> createState() => _PaymentFormState();
@@ -35,41 +32,27 @@ class _PaymentFormState extends State<PaymentForm> {
     getPlans();
     super.initState();
     formPayment = FormGroup({
-      'rutClient': FormControl<String>(
-          value: widget.payment != null ? widget.payment!.typeOfPayment : '',
-          validators: [
-            Validators.required,
-          ]),
+      'rutClient': FormControl<Client>(value: null, validators: [
+        Validators.required,
+      ]),
       'idEmpresa': FormControl<int>(value: 2, validators: [
         Validators.required,
       ]),
-      'idPlan': FormControl<int>(
-          value: widget.payment != null ? widget.payment!.id : 0,
-          validators: [
-            Validators.required,
-          ]),
-      'typeOfPayment': FormControl<String>(
-          value: widget.payment != null ? widget.payment!.typeOfPayment : '',
-          validators: [
-            Validators.required,
-          ]),
-      'date': FormControl<DateTime>(
-          value: widget.payment != null ? widget.payment!.date : DateTime.now(),
-          validators: [
-            Validators.required,
-          ]),
-      'expiredAt': FormControl<DateTime>(
-          value: widget.payment != null
-              ? widget.payment!.expiredAt
-              : DateTime.now(),
-          validators: [
-            Validators.required,
-          ]),
-      'price': FormControl<int>(
-          value: widget.payment != null ? widget.payment!.price : 0,
-          validators: [
-            Validators.required,
-          ]),
+      'idPlan': FormControl<int>(value: null, validators: [
+        Validators.required,
+      ]),
+      'typeOfPayment': FormControl<String>(value: 'Efectivo', validators: [
+        Validators.required,
+      ]),
+      'date': FormControl<DateTime>(value: DateTime.now(), validators: [
+        Validators.required,
+      ]),
+      'expiredAt': FormControl<DateTime>(value: DateTime.now(), validators: [
+        Validators.required,
+      ]),
+      'price': FormControl<int>(value: 0, validators: [
+        Validators.required,
+      ]),
     });
   }
 
@@ -111,26 +94,13 @@ class _PaymentFormState extends State<PaymentForm> {
             borderRadius: BorderRadius.circular(16),
             side: const BorderSide(color: Colors.black, width: 2),
           ),
-          // scrollable: true,
-          // title: widget.question != null
+
           title:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            widget.payment != null
-                ? Text(
-                    'Editar pago',
-                    style: Theme.of(context).textTheme.displayMedium,
-                  )
-                : Text(
-                    'Crear pago',
-                    style: Theme.of(context).textTheme.displayMedium,
-                  ),
-            // ReactiveFormConsumer(builder: (context, _, __) {
-            //   return Switch.adaptive(
-            //       value: formPayment.control('enabled').value,
-            //       onChanged: (value) {
-            //         formPayment.control('enabled').value = value;
-            //       });
-            // }),
+            Text(
+              'Crear pago',
+              style: Theme.of(context).textTheme.displayMedium,
+            ),
           ]),
           children: [
             SizedBox(
@@ -165,23 +135,19 @@ class _PaymentFormState extends State<PaymentForm> {
                             //           .toList()),
                             // ),
                             Expanded(
-                              child: ReactiveDropdownSearch<String, String>(
+                              child: ReactiveDropdownSearch<Client, Client>(
                                 formControlName: 'rutClient',
                                 dropdownDecoratorProps:
                                     const DropDownDecoratorProps(
                                   dropdownSearchDecoration: InputDecoration(
                                     hintText: "Selecciona un cliente",
-                                    helperText: 'A',
-                                    labelText: "B",
-                                    contentPadding:
-                                        EdgeInsets.fromLTRB(12, 12, 0, 0),
+                                    labelText: "Cliente",
                                     border: OutlineInputBorder(),
                                   ),
                                 ),
                                 popupProps: PopupProps.dialog(
                                   isFilterOnline: true,
                                   showSearchBox: true,
-                                  showSelectedItems: true,
                                   dialogProps: DialogProps(
                                     actions: [
                                       Padding(
@@ -199,13 +165,23 @@ class _PaymentFormState extends State<PaymentForm> {
                                       ),
                                     ],
                                   ),
+                                  onDismissed: () {
+                                    print("dismissed!");
+                                    calculateExpiredAt();
+                                  },
                                   searchDelay: Duration.zero,
                                   emptyBuilder: (context, text) => Center(
                                     child: Text("No hay resultados para $text"),
                                   ),
                                 ),
+
                                 showClearButton: true,
-                                items: allClients.map((e) => e.rut).toList(),
+                                // onSaved: (value) {
+                                //   calculateExpiredAt();
+                                // },
+                                items: allClients,
+                                itemAsString: (Client? u) =>
+                                    '${u!.rut} - ${u.name}',
                               ),
                             ),
                             Expanded(
@@ -298,20 +274,37 @@ class _PaymentFormState extends State<PaymentForm> {
 
   void calculateExpiredAt() {
     var date = formPayment.control('date').value;
+
+    if (formPayment.control('idPlan').value == null ||
+        formPayment.control('rutClient').value == null) {
+      print('entró');
+      return;
+    }
+
     var plan = allPlans
         .firstWhere((plan) => plan.id == formPayment.control('idPlan').value);
-    var client = allClients.firstWhere(
-        (client) => client.rut == formPayment.control('rutClient').value);
-    formPayment.control('price').value = plan.price;
 
-    // TODO: Validar si es que el cliente tiene plan, se debe sumar a la fecha de expiración y no desde la fecha actual
-
-    print('date: $date');
     print('plan: $plan');
+
+    var client = allClients.firstWhere((client) =>
+        client.rut == (formPayment.control('rutClient').value as Client).rut);
+    formPayment.control('price').value = plan.price;
     print('client: $client');
 
-    var expiredAt = date.add(Duration(days: plan.durationInDays()));
-    formPayment.control('expiredAt').value = expiredAt;
+    // si cliente tiene fecha de expiración sumar desde esa fecha fecha, si no, sumar desde hoy
+
+    if (client.expiredAt != null) {
+      var expiredAt =
+          client.expiredAt!.add(Duration(days: plan.durationInDays()));
+      setState(() {
+        formPayment.control('expiredAt').value = expiredAt;
+      });
+    } else {
+      var expiredAt = date.add(Duration(days: plan.durationInDays()));
+      setState(() {
+        formPayment.control('expiredAt').value = expiredAt;
+      });
+    }
   }
 
   void createPayment() {
@@ -319,14 +312,30 @@ class _PaymentFormState extends State<PaymentForm> {
       print(formPayment.value);
       //   setear el userId en el form
       // form.control('userId').value = widget.userId;
-      print(
-          'Formulario enviado -> ${PaymentDTO.fromJson(formPayment.value).toJson()}');
+
+      print('Formulario enviado -> ${PaymentDTO(
+        rutClient: (formPayment.control('rutClient').value as Client).rut,
+        idEmpresa: formPayment.control('idEmpresa').value,
+        idPlan: formPayment.control('idPlan').value,
+        typeOfPayment: formPayment.control('typeOfPayment').value,
+        date: formPayment.control('date').value,
+        expiredAt: formPayment.control('expiredAt').value,
+        price: formPayment.control('price').value,
+      )}');
 
       setState(() {
         isLoading = true;
       });
       apiService
-          .createPayment(PaymentDTO.fromJson(formPayment.value))
+          .createPayment(PaymentDTO(
+        rutClient: (formPayment.control('rutClient').value as Client).rut,
+        idEmpresa: formPayment.control('idEmpresa').value,
+        idPlan: formPayment.control('idPlan').value,
+        typeOfPayment: formPayment.control('typeOfPayment').value,
+        date: formPayment.control('date').value,
+        expiredAt: formPayment.control('expiredAt').value,
+        price: formPayment.control('price').value,
+      ))
           .then((value) {
         Provider.of<ScaffoldMessengerService>(context, listen: false)
             .showSnackBar(
