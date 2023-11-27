@@ -4,6 +4,7 @@ class User {
   String username;
   String email;
   bool validatedEmail;
+  // TODO:Agregar el rol del usuario
 
   String? profilePicture;
   DateTime createdAt;

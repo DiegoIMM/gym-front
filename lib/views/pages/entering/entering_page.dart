@@ -27,7 +27,7 @@ class _EnteringPageState extends State<EnteringPage> {
   }
 
   var formClient = FormGroup({
-    'rut': FormControl<String>(value: '11111111-1', validators: [
+    'rut': FormControl<String>(value: '190719766', validators: [
       Validators.required,
       Validators.delegate((control) {
         final rut = control.value;

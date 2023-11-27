@@ -103,13 +103,14 @@ class MainLayout extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
+            // TODO: Ocultar esto si no es administrador
             Center(
-                child: Text('Inicio',
+                child: Text('Administración',
                     style: Theme.of(context).textTheme.labelLarge)),
             const Divider(),
 
             ListTile(
-                title: const Text('Inicio'),
+                title: const Text('Resumen'),
                 selected: GoRouterState.of(context).fullPath == '/inicio',
                 onTap: () {
                   context.go('/inicio');

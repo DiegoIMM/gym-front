@@ -158,7 +158,8 @@ class _PaymentFormState extends State<PaymentForm> {
                                   items: allClients
                                       .map((client) => DropdownMenuItem(
                                             value: client.rut,
-                                            child: Text(client.rut),
+                                            child: Text(
+                                                '${client.rut} - ${client.name}'),
                                           ))
                                       .toList()),
                             ),
