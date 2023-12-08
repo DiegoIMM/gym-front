@@ -370,7 +370,7 @@ class _SignUpPageState extends State<SignUpPage> {
         loadingButton = false;
       });
       print('userWithToken: $userWithToken');
-      context.read<AuthService>().saveToken(userWithToken['token']);
+      // context.read<AuthService>().saveToken(userWithToken['token']);
       var user = User.fromJson(userWithToken['user']);
       await context.read<AuthService>().saveUser(user);
 

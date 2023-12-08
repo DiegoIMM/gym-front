@@ -20,250 +20,121 @@ class _LogInPageState extends State<LogInPage> {
   bool loadingButton = false;
 
   final form = FormGroup({
-    'email': FormControl<String>(
-        value: '', validators: [Validators.required, Validators.email]),
-    'password':
-        FormControl<String>(value: '', validators: [Validators.required]),
+    'users': FormControl<String>(value: '', validators: [Validators.required]),
+    'pass': FormControl<String>(value: '', validators: [Validators.required]),
   });
 
   @override
   Widget build(BuildContext context) {
-    Widget buildWideContainers() {
-      return Center(
-          child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.6,
-              child: ReactiveForm(
-                formGroup: form,
-                child: Center(
-                  child: ListView(
-                    children: <Widget>[
-                      const Icon(
-                        Icons.fitness_center_rounded,
-                        size: 100,
-                      ),
-                      const Center(
-                        child: Text(
-                          'Bienvenido a Planeta Fitness',
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.black,
-                          ),
+    return Center(
+        child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.6,
+            child: ReactiveForm(
+              formGroup: form,
+              child: Center(
+                child: ListView(
+                  children: <Widget>[
+                    const Icon(
+                      Icons.fitness_center_rounded,
+                      size: 100,
+                    ),
+                    const Center(
+                      child: Text(
+                        'Bienvenido a Planeta Fitness',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black,
                         ),
                       ),
-                      // const Spacer(),
-                      const Center(
-                        child: Text(
-                          'Iniciar sesión',
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.black,
-                          ),
+                    ),
+                    // const Spacer(),
+                    const Center(
+                      child: Text(
+                        'Iniciar sesión',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black,
                         ),
                       ),
-                      ReactiveTextField(
-                        enableInteractiveSelection: true,
-                        enableSuggestions: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Email',
-                          icon: Icon(Icons.email),
-                        ),
-                        formControlName: 'email',
-                        validationMessages: {
-                          'required': (error) =>
-                              'El correo no puede estar vacío',
-                          'email': (error) =>
-                              'El formato del correo no es válido',
-                        },
+                    ),
+                    ReactiveTextField(
+                      enableInteractiveSelection: true,
+                      enableSuggestions: true,
+                      decoration: const InputDecoration(
+                        labelText: 'Usuario',
+                        icon: Icon(Icons.email),
                       ),
-                      ReactiveTextField(
-                        formControlName: 'password',
-                        obscureText: true,
-                        enableInteractiveSelection: true,
-                        enableSuggestions: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Contraseña',
-                          icon: Icon(Icons.password),
-                        ),
-                        validationMessages: {
-                          'required': (error) =>
-                              'La contraseña no puede estar en blanco',
-                        },
+                      formControlName: 'users',
+                      validationMessages: {
+                        'required': (error) => 'El correo no puede estar vacío',
+                      },
+                    ),
+                    ReactiveTextField(
+                      formControlName: 'pass',
+                      obscureText: true,
+                      enableInteractiveSelection: true,
+                      enableSuggestions: true,
+                      decoration: const InputDecoration(
+                        labelText: 'Contraseña',
+                        icon: Icon(Icons.password),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                                text: '¿Olvidaste tu clave? ',
-                                children: <InlineSpan>[
-                                  WidgetSpan(
-                                    alignment: PlaceholderAlignment.baseline,
-                                    baseline: TextBaseline.alphabetic,
-                                    child: TextButton(
-                                      onPressed: () =>
-                                          context.go('/auth/recovery-password'),
-                                      child: const Text(
-                                        'Recuperar contraseña',
-                                      ),
-                                    ),
-                                  )
-                                ])),
-                      ),
-                      ReactiveFormConsumer(
-                        builder: (context, form, child) {
-                          return ElevatedButton(
-                            onPressed: (!loadingButton && form.valid)
-                                ? () => login(context)
-                                : null,
-                            child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text('Iniciar sesión'),
-                                  loadingButton
-                                      ? Container(
-                                          width: 16,
-                                          height: 16,
-                                          padding: const EdgeInsets.all(2.0),
-                                          child:
-                                              const CircularProgressIndicator(
-                                            strokeWidth: 3,
-                                          ),
-                                        )
-                                      : Container(),
-                                ]),
-                          );
-                        },
-                      ),
-                      // const Spacer(),
-                    ],
-                  ),
-                ),
-              )));
-    }
-
-    Widget buildPhoneContainer() {
-      return Center(
-          child: ReactiveForm(
-        formGroup: form,
-        child: Center(
-          child: ListView(
-            children: <Widget>[
-              const Icon(
-                Icons.gavel_rounded,
-                size: 100,
-              ),
-              const Center(
-                child: Text(
-                  'Bienvenido a Gym',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.black,
-                  ),
+                      validationMessages: {
+                        'required': (error) =>
+                            'La contraseña no puede estar en blanco',
+                      },
+                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: RichText(
+                    //       textAlign: TextAlign.center,
+                    //       text: TextSpan(
+                    //           text: '¿Olvidaste tu clave? ',
+                    //           children: <InlineSpan>[
+                    //             WidgetSpan(
+                    //               alignment: PlaceholderAlignment.baseline,
+                    //               baseline: TextBaseline.alphabetic,
+                    //               child: TextButton(
+                    //                 onPressed: () =>
+                    //                     context.go('/auth/recovery-password'),
+                    //                 child: const Text(
+                    //                   'Recuperar contraseña',
+                    //                 ),
+                    //               ),
+                    //             )
+                    //           ])),
+                    // ),
+                    ReactiveFormConsumer(
+                      builder: (context, form, child) {
+                        return ElevatedButton(
+                          onPressed: (!loadingButton && form.valid)
+                              ? () => login(context)
+                              : null,
+                          child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text('Iniciar sesión'),
+                                loadingButton
+                                    ? Container(
+                                        width: 16,
+                                        height: 16,
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: const CircularProgressIndicator(
+                                          strokeWidth: 3,
+                                        ),
+                                      )
+                                    : Container(),
+                              ]),
+                        );
+                      },
+                    ),
+                    // const Spacer(),
+                  ],
                 ),
               ),
-              // const Spacer(),
-              const Center(
-                child: Text(
-                  'Iniciar sesión',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              ReactiveTextField(
-                enableInteractiveSelection: true,
-                enableSuggestions: true,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  icon: Icon(Icons.email),
-                ),
-                formControlName: 'email',
-                validationMessages: {
-                  'required': (error) => 'El correo no puede estar vacío',
-                  'email': (error) => 'El formato del correo no es válido',
-                },
-              ),
-              ReactiveTextField(
-                formControlName: 'password',
-                obscureText: true,
-                enableInteractiveSelection: true,
-                enableSuggestions: true,
-                decoration: const InputDecoration(
-                  labelText: 'Contraseña',
-                  icon: Icon(Icons.password),
-                ),
-                validationMessages: {
-                  'required': (error) =>
-                      'La contraseña no puede estar en blanco',
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                        text: '¿Olvidaste tu clave? ',
-                        children: <InlineSpan>[
-                          WidgetSpan(
-                            alignment: PlaceholderAlignment.baseline,
-                            baseline: TextBaseline.alphabetic,
-                            child: TextButton(
-                              onPressed: () =>
-                                  context.go('/auth/recovery-password'),
-                              child: const Text(
-                                'Recuperar contraseña',
-                              ),
-                            ),
-                          )
-                        ])),
-              ),
-              ReactiveFormConsumer(
-                builder: (context, form, child) {
-                  return ElevatedButton(
-                    onPressed: (!loadingButton && form.valid)
-                        ? () => login(context)
-                        : null,
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('Iniciar sesión'),
-                          loadingButton
-                              ? Container(
-                                  width: 16,
-                                  height: 16,
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: const CircularProgressIndicator(
-                                    strokeWidth: 3,
-                                  ),
-                                )
-                              : Container(),
-                        ]),
-                  );
-                },
-              ),
-              // const Spacer(),
-            ],
-          ),
-        ),
-      ));
-    }
-
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        if (constraints.maxWidth > 600) {
-          return buildWideContainers();
-        } else {
-          return buildPhoneContainer();
-        }
-      },
-    );
+            )));
   }
 
   void login(BuildContext context) async {
@@ -272,11 +143,10 @@ class _LogInPageState extends State<LogInPage> {
     });
     LoginDTO loginDTO = LoginDTO.fromJson(form.value);
 
-    LogInPage._apiService.login(loginDTO).then((dynamic userWithToken) async {
-      context.read<AuthService>().saveToken(userWithToken['token']);
-      var user = User.fromJson(userWithToken['user']);
+    LogInPage._apiService.login(loginDTO).then((dynamic userJson) async {
+      var user = User.fromJson(userJson);
       await context.read<AuthService>().saveUser(user);
-      context.go('/preguntas');
+      context.go('/ingreso');
 
       setState(() {
         loadingButton = false;

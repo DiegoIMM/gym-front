@@ -4,8 +4,9 @@ import 'package:gym_front/models/plan.dart';
 import '../pages/plan/plan_form.dart';
 
 class PlanCard extends StatelessWidget {
-  const PlanCard({super.key, required this.plan});
+  const PlanCard({super.key, required this.plan, this.canEdit = true});
 
+  final bool canEdit;
   final Plan plan;
 
   @override
@@ -42,29 +43,31 @@ class PlanCard extends StatelessWidget {
                         fontSize: 20,
                         fontWeight: FontWeight.bold)),
                 const Spacer(),
-                OutlinedButton(
-                    onPressed: () async {
-                      var result = await showDialog<dynamic>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return PlanForm(
-                            plan: plan,
+                canEdit
+                    ? OutlinedButton(
+                        onPressed: () async {
+                          var result = await showDialog<dynamic>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return PlanForm(
+                                plan: plan,
+                              );
+                            },
                           );
-                        },
-                      );
 
-                      print("result: $result");
-                    },
-                    child: const Row(
-                      children: [
-                        Icon(
-                          Icons.edit,
-                          color: Colors.purple,
-                        ),
-                        Text('Editar Plan',
-                            style: TextStyle(color: Colors.purple)),
-                      ],
-                    )),
+                          print("result: $result");
+                        },
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.edit,
+                              color: Colors.purple,
+                            ),
+                            Text('Editar Plan',
+                                style: TextStyle(color: Colors.purple)),
+                          ],
+                        ))
+                    : Container(),
                 const SizedBox(width: 8),
                 // TODO: Botón y función para eliminar
                 // TextButton(

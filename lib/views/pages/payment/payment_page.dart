@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gym_front/views/pages/payment/payment_form.dart';
+import 'package:rut_utils/rut_utils.dart';
 
 import '../../../models/payment.dart';
 import '../../../services/api_service.dart';
@@ -158,7 +159,7 @@ class _PlanPageState extends State<PaymentPage> {
                                                     .toString()
                                                     .substring(0, 10))),
                                                 DataCell(Text(
-                                                    '${payment.client.name} ${payment.client.rut}')),
+                                                    '${payment.client.name} - ${formatRut(payment.client.rut)}')),
                                                 DataCell(
                                                     Text(payment.plan.name)),
                                                 DataCell(Tooltip(

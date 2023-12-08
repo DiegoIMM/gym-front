@@ -27,7 +27,7 @@ class _EnteringPageState extends State<EnteringPage> {
   }
 
   var formClient = FormGroup({
-    'rut': FormControl<String>(value: '190719766', validators: [
+    'rut': FormControl<String>(value: '', validators: [
       Validators.required,
       Validators.delegate((control) {
         final rut = control.value;
@@ -231,7 +231,7 @@ class _EnteringPageState extends State<EnteringPage> {
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineMedium),
-                                    Text('${client?.rut}',
+                                    Text(formatRut(client?.rut ?? ''),
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineMedium),
@@ -247,7 +247,10 @@ class _EnteringPageState extends State<EnteringPage> {
                                 client!.plan != null
                                     ? SizedBox(
                                         height: 200,
-                                        child: PlanCard(plan: client!.plan!))
+                                        child: PlanCard(
+                                          plan: client!.plan!,
+                                          canEdit: false,
+                                        ))
                                     : const Text('Sin plan'),
                               ],
                             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mailto/mailto.dart';
+import 'package:rut_utils/rut_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../models/client.dart';
@@ -161,8 +162,8 @@ class _ClientsPageState extends State<ClientsPage> {
                                                 for (var client in clients)
                                                   DataRow(
                                                     cells: <DataCell>[
-                                                      DataCell(
-                                                          Text(client.rut)),
+                                                      DataCell(Text(formatRut(
+                                                          client.rut))),
                                                       DataCell(
                                                           Text(client.name)),
                                                       DataCell(

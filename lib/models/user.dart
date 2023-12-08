@@ -1,39 +1,23 @@
 class User {
   int id;
-  String name;
-  String username;
-  String email;
-  bool validatedEmail;
-  // TODO:Agregar el rol del usuario
-
-  String? profilePicture;
-  DateTime createdAt;
-  DateTime? updatedAt;
+  String users;
+  String rol;
+  bool habilitado;
 
   User({
     required this.id,
-    required this.name,
-    required this.username,
-    required this.email,
-    required this.validatedEmail,
-    required this.profilePicture,
-    required this.createdAt,
-    required this.updatedAt,
+    required this.users,
+    required this.rol,
+    required this.habilitado,
   });
 
 // crear un usuario desde un json
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
-      name: json['name'],
-      username: json['username'],
-      email: json['email'],
-      validatedEmail: json['validated_email'],
-      profilePicture: json['profile_picture'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: json['updated_at'] != null
-          ? DateTime.parse(json['updated_at'])
-          : null,
+      users: json['users'],
+      rol: json['rol'],
+      habilitado: json['habilitado'],
     );
   }
 
@@ -41,13 +25,9 @@ class User {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'name': name,
-      'username': username,
-      'email': email,
-      'validated_email': validatedEmail,
-      'profile_picture': profilePicture,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt?.toIso8601String(),
+      'users': users,
+      'rol': rol,
+      'habilitado': habilitado,
     };
   }
 }

@@ -3,6 +3,7 @@ import 'package:gym_front/models/client.dart';
 import 'package:provider/provider.dart';
 import 'package:reactive_dropdown_search/reactive_dropdown_search.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+import 'package:rut_utils/rut_utils.dart';
 
 import '../../../dtos/payment_dto.dart';
 import '../../../models/plan.dart';
@@ -47,10 +48,13 @@ class _PaymentFormState extends State<PaymentForm> {
       'date': FormControl<DateTime>(value: DateTime.now(), validators: [
         Validators.required,
       ]),
-      'expiredAt': FormControl<DateTime>(value: DateTime.now(), validators: [
-        Validators.required,
-      ]),
-      'price': FormControl<int>(value: 0, validators: [
+      'expiredAt': FormControl<DateTime>(
+          value: DateTime.now(),
+          disabled: true,
+          validators: [
+            Validators.required,
+          ]),
+      'price': FormControl<int>(value: 0, disabled: true, validators: [
         Validators.required,
       ]),
     });
@@ -181,7 +185,7 @@ class _PaymentFormState extends State<PaymentForm> {
                                 // },
                                 items: allClients,
                                 itemAsString: (Client? u) =>
-                                    '${u!.rut} - ${u.name}',
+                                    '${formatRut(u!.rut)} - ${u.name}',
                               ),
                             ),
                             Expanded(
@@ -194,7 +198,8 @@ class _PaymentFormState extends State<PaymentForm> {
                                   items: allPlans
                                       .map((plan) => DropdownMenuItem(
                                             value: plan.id,
-                                            child: Text(plan.name),
+                                            child: Text(
+                                                '${plan.name} - \$${plan.price.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}'),
                                           ))
                                       .toList()),
                             ),
@@ -309,7 +314,7 @@ class _PaymentFormState extends State<PaymentForm> {
 
   void createPayment() {
     if (formPayment.valid) {
-      print(formPayment.value);
+      print(formPayment.rawValue);
       //   setear el userId en el form
       // form.control('userId').value = widget.userId;
 
@@ -321,7 +326,7 @@ class _PaymentFormState extends State<PaymentForm> {
         date: formPayment.control('date').value,
         expiredAt: formPayment.control('expiredAt').value,
         price: formPayment.control('price').value,
-      )}');
+      ).toJson()}');
 
       setState(() {
         isLoading = true;

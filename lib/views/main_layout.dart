@@ -64,18 +64,6 @@ class MainLayout extends StatelessWidget {
             //     }
             //   },
             // ),
-            context.watch<AuthService>().isAuthenticated
-                ? ListTile(
-                    title: const Text('Mi perfil'),
-                    onTap: () {
-                      var username =
-                          Provider.of<AuthService>(context, listen: false)
-                              .currentUser!
-                              .username;
-
-                      context.go('/perfil/$username');
-                    })
-                : Container(),
 
             context.watch<AuthService>().isAuthenticated
                 ? ListTile(
@@ -83,59 +71,80 @@ class MainLayout extends StatelessWidget {
                       'Cerrar sesión',
                       style: TextStyle(color: Colors.red),
                     ),
-                    onTap: () => context.read<AuthService>().logout(),
-                  )
+                    onTap: () {
+                      context.read<AuthService>().logout();
+                      context.go('/auth/login');
+                    })
                 : Container(),
 
             const SizedBox(
               height: 10,
             ),
-            Center(
-                child: Text('Consultar',
-                    style: Theme.of(context).textTheme.labelLarge)),
-            const Divider(),
-            ListTile(
-                title: const Text('Ingresos'),
-                selected: GoRouterState.of(context).fullPath == '/ingreso',
-                onTap: () {
-                  context.go('/ingreso');
-                }),
-            const SizedBox(
-              height: 10,
-            ),
-            // TODO: Ocultar esto si no es administrador
-            Center(
-                child: Text('Administración',
-                    style: Theme.of(context).textTheme.labelLarge)),
-            const Divider(),
 
-            ListTile(
-                title: const Text('Resumen'),
-                selected: GoRouterState.of(context).fullPath == '/inicio',
-                onTap: () {
-                  context.go('/inicio');
-                }),
-            ListTile(
-              title: const Text('Planes'),
-              selected: GoRouterState.of(context).path == '/app/planes',
-              onTap: () {
-                context.go('/planes');
-              },
+            authenticatedWidget(
+                context.watch<AuthService>().isAuthenticated,
+                Center(
+                    child: Text('Consultar',
+                        style: Theme.of(context).textTheme.labelLarge))),
+
+            authenticatedWidget(
+                context.watch<AuthService>().isAuthenticated, const Divider()),
+            authenticatedWidget(
+                context.watch<AuthService>().isAuthenticated,
+                ListTile(
+                    title: const Text('Ingresos'),
+                    selected: GoRouterState.of(context).fullPath == '/ingreso',
+                    onTap: () {
+                      context.go('/ingreso');
+                    })),
+            // TODO: Ocultar esto si no es administrador
+
+            authenticatedWidget(
+              context.watch<AuthService>().currentUser?.rol == 'admin',
+              Center(
+                  child: Text('Administración',
+                      style: Theme.of(context).textTheme.labelLarge)),
             ),
-            ListTile(
-              title: const Text('Clientes'),
-              selected: GoRouterState.of(context).path == '/app/clientes',
-              onTap: () {
-                context.go('/clientes');
-              },
-            ),
-            ListTile(
-              title: const Text('Pagos'),
-              selected: GoRouterState.of(context).path == '/app/pagos',
-              onTap: () {
-                context.go('/pagos');
-              },
-            )
+
+            authenticatedWidget(
+                context.watch<AuthService>().currentUser?.rol == 'admin',
+                const Divider()),
+
+            authenticatedWidget(
+                context.watch<AuthService>().currentUser?.rol == 'admin',
+                ListTile(
+                    title: const Text('Resumen'),
+                    selected: GoRouterState.of(context).fullPath == '/inicio',
+                    onTap: () {
+                      context.go('/inicio');
+                    })),
+            authenticatedWidget(
+                context.watch<AuthService>().currentUser?.rol == 'admin',
+                ListTile(
+                  title: const Text('Planes'),
+                  selected: GoRouterState.of(context).path == '/app/planes',
+                  onTap: () {
+                    context.go('/planes');
+                  },
+                )),
+            authenticatedWidget(
+                context.watch<AuthService>().currentUser?.rol == 'admin',
+                ListTile(
+                  title: const Text('Clientes'),
+                  selected: GoRouterState.of(context).path == '/app/clientes',
+                  onTap: () {
+                    context.go('/clientes');
+                  },
+                )),
+            authenticatedWidget(
+                context.watch<AuthService>().currentUser?.rol == 'admin',
+                ListTile(
+                  title: const Text('Pagos'),
+                  selected: GoRouterState.of(context).path == '/app/pagos',
+                  onTap: () {
+                    context.go('/pagos');
+                  },
+                ))
           ],
         ),
       );
@@ -270,5 +279,9 @@ class MainLayout extends StatelessWidget {
       //   return _buildMobileContainer(context);
       // }
     });
+  }
+
+  Widget authenticatedWidget(bool isAuthenticated, Widget widget) {
+    return isAuthenticated ? widget : Container();
   }
 }
