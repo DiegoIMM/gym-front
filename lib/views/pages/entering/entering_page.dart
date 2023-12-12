@@ -231,7 +231,7 @@ class _EnteringPageState extends State<EnteringPage> {
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineMedium),
-                                    Text(formatRut(client?.rut ?? ''),
+                                    Text(client?.rut ?? '',
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineMedium),

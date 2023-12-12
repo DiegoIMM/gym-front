@@ -21,7 +21,9 @@ class AuthService with ChangeNotifier, DiagnosticableTreeMixin {
   _init() async {
     await _getCurrentUser().then((value) {
       _currentUser = value;
-      _isAuthenticated = true;
+      if (_currentUser != null) {
+        _isAuthenticated = true;
+      }
     });
     notifyListeners();
   }

@@ -39,7 +39,7 @@ class _ClientFormState extends State<ClientForm> {
           value: widget.client != null
               ? widget.client!.rut
               : kDebugMode
-                  ? '11111111-1'
+                  ? ''
                   : '',
           validators: [
             Validators.required,
@@ -63,7 +63,7 @@ class _ClientFormState extends State<ClientForm> {
           value: widget.client != null
               ? widget.client!.name
               : kDebugMode
-                  ? 'Diego'
+                  ? ''
                   : '',
           validators: [
             Validators.required,
@@ -72,15 +72,15 @@ class _ClientFormState extends State<ClientForm> {
           value: widget.client != null
               ? widget.client!.email
               : kDebugMode
-                  ? 'diego@icloud.com'
+                  ? ''
                   : '',
           validators: [Validators.required, Validators.email]),
       'phone': FormControl<String>(
           value: widget.client != null
               ? widget.client!.phone
               : kDebugMode
-                  ? '+56912123434'
-                  : '+569',
+                  ? ''
+                  : '',
           validators: [
             Validators.required,
             Validators.pattern(r'^(\+?56)?(\s?)(0?9)(\s?)[9876543210]\d{7}$',
@@ -90,8 +90,8 @@ class _ClientFormState extends State<ClientForm> {
           value: widget.client != null
               ? widget.client!.auxiliarPhone
               : kDebugMode
-                  ? '+56912123434'
-                  : '+569',
+                  ? ''
+                  : '',
           validators: [
             Validators.required,
             Validators.pattern(r'^(\+?56)?(\s?)(0?9)(\s?)[9876543210]\d{7}$',
@@ -106,19 +106,19 @@ class _ClientFormState extends State<ClientForm> {
           value: widget.client != null
               ? widget.client!.city
               : kDebugMode
-                  ? 'Santiago'
+                  ? ''
                   : null),
       'comuna': FormControl<String>(
           value: widget.client != null
               ? widget.client!.comuna
               : kDebugMode
-                  ? 'Santiago'
+                  ? ''
                   : null),
       'address': FormControl<String>(
           value: widget.client != null
               ? widget.client!.address
               : kDebugMode
-                  ? 'Santiago'
+                  ? ''
                   : null),
       'birthDate': FormControl<DateTime>(
           value: widget.client != null ? widget.client!.birthDate : null,
