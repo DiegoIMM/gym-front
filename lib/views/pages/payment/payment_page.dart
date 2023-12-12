@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gym_front/views/pages/payment/payment_form.dart';
-import 'package:rut_utils/rut_utils.dart';
 
 import '../../../models/payment.dart';
 import '../../../services/api_service.dart';
@@ -76,7 +75,7 @@ class _PlanPageState extends State<PaymentPage> {
                     return const Text('No hay conexión al servidor');
                   case ConnectionState.active:
                   case ConnectionState.waiting:
-                    return LoadingWidget(text: 'Cargando preguntas');
+                    return LoadingWidget(text: 'Cargando pagos');
                   case ConnectionState.done:
                     if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
@@ -159,7 +158,7 @@ class _PlanPageState extends State<PaymentPage> {
                                                     .toString()
                                                     .substring(0, 10))),
                                                 DataCell(Text(
-                                                    '${payment.client.name} - ${formatRut(payment.client.rut)}')),
+                                                    '${payment.client.name} - ${payment.client.rut}')),
                                                 DataCell(
                                                     Text(payment.plan.name)),
                                                 DataCell(Tooltip(

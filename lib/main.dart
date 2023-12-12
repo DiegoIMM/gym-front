@@ -38,7 +38,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => ScaffoldMessengerService()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }

@@ -3,7 +3,6 @@ import 'package:gym_front/models/client.dart';
 import 'package:provider/provider.dart';
 import 'package:reactive_dropdown_search/reactive_dropdown_search.dart';
 import 'package:reactive_forms/reactive_forms.dart';
-import 'package:rut_utils/rut_utils.dart';
 
 import '../../../dtos/payment_dto.dart';
 import '../../../models/plan.dart';
@@ -36,7 +35,7 @@ class _PaymentFormState extends State<PaymentForm> {
       'rutClient': FormControl<Client>(value: null, validators: [
         Validators.required,
       ]),
-      'idEmpresa': FormControl<int>(value: 2, validators: [
+      'idEmpresa': FormControl<int>(value: 1, validators: [
         Validators.required,
       ]),
       'idPlan': FormControl<int>(value: null, validators: [
@@ -185,7 +184,7 @@ class _PaymentFormState extends State<PaymentForm> {
                                 // },
                                 items: allClients,
                                 itemAsString: (Client? u) =>
-                                    '${formatRut(u!.rut)} - ${u.name}',
+                                    '${u!.rut} - ${u.name}',
                               ),
                             ),
                             Expanded(
@@ -344,7 +343,7 @@ class _PaymentFormState extends State<PaymentForm> {
           .then((value) {
         Provider.of<ScaffoldMessengerService>(context, listen: false)
             .showSnackBar(
-          "Plan creado correctamente",
+          "Pago creado correctamente",
         );
 
         //   Cerrar el dialogo

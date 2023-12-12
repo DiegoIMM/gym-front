@@ -97,7 +97,6 @@ class MainLayout extends StatelessWidget {
                     onTap: () {
                       context.go('/ingreso');
                     })),
-            // TODO: Ocultar esto si no es administrador
 
             authenticatedWidget(
               context.watch<AuthService>().currentUser?.rol == 'admin',

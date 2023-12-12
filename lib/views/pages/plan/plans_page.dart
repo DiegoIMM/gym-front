@@ -76,7 +76,7 @@ class _PlanPageState extends State<PlanPage> {
                     return const Text('No hay conexión al servidor');
                   case ConnectionState.active:
                   case ConnectionState.waiting:
-                    return LoadingWidget(text: 'Cargando preguntas');
+                    return LoadingWidget(text: 'Cargando planes');
                   case ConnectionState.done:
                     if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');

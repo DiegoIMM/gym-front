@@ -98,7 +98,7 @@ class _ClientFormState extends State<ClientForm> {
                 validationMessage: 'No es un número de teléfono válido')
           ]),
       'idEmpresa': FormControl<int>(
-          value: widget.client != null ? widget.client!.empresa!.id : 2,
+          value: widget.client != null ? widget.client!.empresa!.id : 1,
           validators: [
             Validators.required,
           ]),
@@ -316,7 +316,6 @@ class _ClientFormState extends State<ClientForm> {
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 16),
                       ReactiveTextField(
                         enableInteractiveSelection: true,

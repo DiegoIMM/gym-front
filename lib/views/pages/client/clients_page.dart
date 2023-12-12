@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mailto/mailto.dart';
-import 'package:rut_utils/rut_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../models/client.dart';
@@ -78,7 +77,7 @@ class _ClientsPageState extends State<ClientsPage> {
                     return const Text('No hay conexión al servidor');
                   case ConnectionState.active:
                   case ConnectionState.waiting:
-                    return LoadingWidget(text: 'Cargando preguntas');
+                    return LoadingWidget(text: 'Cargando clientes');
                   case ConnectionState.done:
                     if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
@@ -162,8 +161,8 @@ class _ClientsPageState extends State<ClientsPage> {
                                                 for (var client in clients)
                                                   DataRow(
                                                     cells: <DataCell>[
-                                                      DataCell(Text(formatRut(
-                                                          client.rut))),
+                                                      DataCell(
+                                                          Text(client.rut)),
                                                       DataCell(
                                                           Text(client.name)),
                                                       DataCell(

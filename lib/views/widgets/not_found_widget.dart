@@ -18,8 +18,8 @@ class NotFound extends StatelessWidget {
             child: const Text("Volver"),
           ),
           TextButton(
-            onPressed: () => context.go('/preguntas'),
-            child: const Text("Puedes explorar las nuevas preguntas"),
+            onPressed: () => context.go('/inicio'),
+            child: const Text("Puedes volver al incio"),
           ),
         ],
       ),
