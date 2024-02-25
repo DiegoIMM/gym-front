@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mailto/mailto.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../models/client.dart';
 import '../../../services/api_service.dart';
 import '../../widgets/loading_widget.dart';
 import '../../widgets/no_data_widget.dart';
+import 'client_data_source.dart';
 import 'client_form.dart';
 
 class ClientsPage extends StatefulWidget {
@@ -19,6 +18,8 @@ class _ClientsPageState extends State<ClientsPage> {
   late Future<List<Client>> futureClients;
 
   static var apiService = ApiService();
+  int _columnIndex = 0;
+  bool _columnAscending = true;
 
   @override
   void initState() {
@@ -91,6 +92,88 @@ class _ClientsPageState extends State<ClientsPage> {
                       var width = MediaQuery.of(context).size.width;
                       var clients = snapshot.data!;
 
+                      void filterByName(String text) {
+                        var a = clients
+                            .where((client) => client.name!
+                                .toLowerCase()
+                                .contains(text.toLowerCase()))
+                            .toList();
+                        setState(() {
+                          print(clients.length);
+                        });
+                      }
+
+                      void _sort(int columnIndex, bool ascending) {
+                        setState(() {
+                          _columnIndex = columnIndex;
+                          _columnAscending = ascending;
+                          if (columnIndex == 0) {
+                            if (ascending) {
+                              clients.sort((a, b) =>
+                                  a.numberClient!.compareTo(b.numberClient!));
+                            } else {
+                              clients.sort((a, b) =>
+                                  b.numberClient!.compareTo(a.numberClient!));
+                            }
+                          }
+                          if (columnIndex == 1) {
+                            if (ascending) {
+                              clients.sort((a, b) => a.rut!.compareTo(b.rut!));
+                            } else {
+                              clients.sort((a, b) => b.rut!.compareTo(a.rut!));
+                            }
+                          }
+                          if (columnIndex == 2) {
+                            if (ascending) {
+                              clients
+                                  .sort((a, b) => a.name!.compareTo(b.name!));
+                            } else {
+                              clients
+                                  .sort((a, b) => b.name!.compareTo(a.name!));
+                            }
+                          }
+                          if (columnIndex == 3) {
+                            if (ascending) {
+                              clients
+                                  .sort((a, b) => a.phone!.compareTo(b.phone!));
+                            } else {
+                              clients
+                                  .sort((a, b) => b.phone!.compareTo(a.phone!));
+                            }
+                          }
+                          if (columnIndex == 4) {
+                            if (ascending) {
+                              clients.sort((a, b) =>
+                                  a.plan!.name.compareTo(b.plan!.name));
+                            } else {
+                              clients.sort((a, b) =>
+                                  b.plan!.name.compareTo(a.plan!.name));
+                            }
+                          }
+                          if (columnIndex == 5) {
+                            if (ascending) {
+                              clients.sort((a, b) {
+                                if (a.expiredAt != null &&
+                                    b.expiredAt != null) {
+                                  return a.expiredAt!.compareTo(b.expiredAt!);
+                                } else {
+                                  return 0;
+                                }
+                              });
+                            } else {
+                              clients.sort((a, b) {
+                                if (a.expiredAt != null &&
+                                    b.expiredAt != null) {
+                                  return b.expiredAt!.compareTo(a.expiredAt!);
+                                } else {
+                                  return 0;
+                                }
+                              });
+                            }
+                          }
+                        });
+                      }
+
                       return clients.isEmpty
                           ? NoData()
                           : Column(
@@ -103,185 +186,87 @@ class _ClientsPageState extends State<ClientsPage> {
                                   child: Row(
                                     children: [
                                       Expanded(
-                                        child: Center(
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: DataTable(
-                                              columns: const <DataColumn>[
-                                                DataColumn(
-                                                  label: Text('Rut',
-                                                      style: TextStyle(
-                                                        fontSize: 24,
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                      )),
-                                                ),
-                                                DataColumn(
-                                                  label: Text('Nombre',
-                                                      style: TextStyle(
-                                                        fontSize: 24,
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                      )),
-                                                ),
-                                                DataColumn(
-                                                  label: Text('Teléfono',
-                                                      style: TextStyle(
-                                                        fontSize: 24,
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                      )),
-                                                ),
-                                                DataColumn(
-                                                  label: Text('Plan',
-                                                      style: TextStyle(
-                                                        fontSize: 24,
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                      )),
-                                                ),
-                                                DataColumn(
-                                                  label: Text('Expira',
-                                                      style: TextStyle(
-                                                        fontSize: 24,
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                      )),
-                                                ),
-                                                DataColumn(
-                                                  label: Text('Acciones',
-                                                      style: TextStyle(
-                                                        fontSize: 24,
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                      )),
-                                                ),
-                                              ],
-                                              rows: <DataRow>[
-                                                for (var client in clients)
-                                                  DataRow(
-                                                    cells: <DataCell>[
-                                                      DataCell(
-                                                          Text(client.rut)),
-                                                      DataCell(
-                                                          Text(client.name)),
-                                                      DataCell(
-                                                          Text(client.phone)),
-                                                      DataCell(Text(
-                                                          client.plan != null
-                                                              ? client
-                                                                  .plan!.name
-                                                              : 'Sin plan')),
-                                                      DataCell(
-                                                          client.expiredAt !=
-                                                                  null
-                                                              ? Tooltip(
-                                                                  // mostrar cuanto falta para expirar en lenguaje humano
-                                                                  message: client
-                                                                              .expiredAt!
-                                                                              .difference(DateTime.now())
-                                                                              .inDays <
-                                                                          0
-                                                                      ? 'Expirado'
-                                                                      : client.expiredAt!.difference(DateTime.now()).inDays < 1
-                                                                          ? 'Expira hoy'
-                                                                          : client.expiredAt!.difference(DateTime.now()).inDays < 2
-                                                                              ? 'Expira mañana'
-                                                                              : 'Expira en ${client.expiredAt!.difference(DateTime.now()).inDays} dias',
-                                                                  child: Text(
-                                                                    client
-                                                                        .expiredAt
-                                                                        .toString()
-                                                                        .substring(
-                                                                            0,
-                                                                            10),
-                                                                    style:
-                                                                        TextStyle(
-                                                                      //Si esta expirado, mostrar en rojo, si le falta menos de 15 dias en naranjo, y si no en verde
-                                                                      color: client.expiredAt!.difference(DateTime.now()).inDays <
-                                                                              15
-                                                                          ? Colors
-                                                                              .orange
-                                                                          : client.expiredAt!.difference(DateTime.now()).inDays < 0
-                                                                              ? Colors.red
-                                                                              : Colors.green,
-                                                                    ),
-                                                                  ),
-                                                                )
-                                                              : const Text(
-                                                                  'Sin plan')),
-                                                      DataCell(
-                                                        Row(
-                                                          children: [
-                                                            IconButton(
-                                                              icon: const Icon(
-                                                                  Icons.edit),
-                                                              tooltip: 'Editar',
-                                                              onPressed:
-                                                                  () async {
-                                                                var result =
-                                                                    await showDialog<
-                                                                        dynamic>(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (BuildContext
-                                                                          context) {
-                                                                    return ClientForm(
-                                                                        client:
-                                                                            client);
-                                                                  },
-                                                                );
-                                                                if (result) {
-                                                                  getClients();
-                                                                }
-                                                              },
-                                                            ),
-
-                                                            //   un icono con una accion para enviarle un correo al empleado
-                                                            Tooltip(
-                                                              message:
-                                                                  'Enviar correo a ${client.email}',
-                                                              child: IconButton(
-                                                                  onPressed:
-                                                                      () async {
-                                                                    // función para enviar correo mediante un mailTo en web
-                                                                    print(
-                                                                        'Envíar correo a ${client.email}');
-
-                                                                    // ...somewhere in your Flutter app...
-                                                                    final mailtoLink =
-                                                                        Mailto(
-                                                                      to: [
-                                                                        client
-                                                                            .email
-                                                                      ],
-                                                                      // cc: [
-                                                                      //   'cc1@example.com',
-                                                                      //   'cc2@example.com'
-                                                                      // ],
-                                                                      subject:
-                                                                          'Planeta Fitness',
-                                                                      body: '',
-                                                                    );
-                                                                    // Convert the Mailto instance into a string.
-                                                                    // Use either Dart's string interpolation
-                                                                    // or the toString() method.
-                                                                    await launch(
-                                                                        '$mailtoLink');
-                                                                  },
-                                                                  icon: const Icon(
-                                                                      Icons
-                                                                          .email_outlined)),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                              ],
+                                        child: PaginatedDataTable(
+                                          sortColumnIndex: _columnIndex,
+                                          sortAscending: _columnAscending,
+                                          rowsPerPage: 20,
+                                          availableRowsPerPage: const [
+                                            20,
+                                            40,
+                                            50
+                                          ],
+                                          actions: [
+                                            IconButton(
+                                              icon: const Icon(Icons.refresh),
+                                              tooltip: 'Recargar',
+                                              onPressed: () {
+                                                getClients();
+                                              },
                                             ),
-                                          ),
+                                          ],
+                                          primary: true,
+                                          showFirstLastButtons: true,
+                                          header: const Text('Clientes'),
+                                          columns: <DataColumn>[
+                                            DataColumn(
+                                                label: Text('N°',
+                                                    style: TextStyle(
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                    )),
+                                                onSort: _sort),
+                                            DataColumn(
+                                                label: Text('Rut',
+                                                    style: TextStyle(
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                    )),
+                                                onSort: _sort),
+                                            DataColumn(
+                                                label: Text('Nombre',
+                                                    style: TextStyle(
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                    )),
+                                                onSort: _sort),
+                                            DataColumn(
+                                                label: Text('Teléfono',
+                                                    style: TextStyle(
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                    )),
+                                                onSort: _sort),
+                                            DataColumn(
+                                                label: Text('Plan',
+                                                    style: TextStyle(
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                    )),
+                                                onSort: _sort),
+                                            DataColumn(
+                                                label: Text('Expira',
+                                                    style: TextStyle(
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                    )),
+                                                onSort: _sort),
+                                            DataColumn(
+                                              label: Text('Acciones',
+                                                  style: TextStyle(
+                                                    fontSize: 24,
+                                                    fontWeight: FontWeight.w900,
+                                                  )),
+                                            ),
+                                          ],
+                                          source: ClientsDataSource(
+                                              clients: clients,
+                                              context: context),
                                         ),
                                       ),
                                     ],

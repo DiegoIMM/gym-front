@@ -147,19 +147,7 @@ class _EnteringPageState extends State<EnteringPage> {
                     children: [
                       Expanded(
                         child: Card(
-                          surfaceTintColor: client!.expiredAt == null
-                              ? Colors.red
-                              : client!.expiredAt!
-                                          .difference(DateTime.now())
-                                          .inDays <
-                                      15
-                                  ? Colors.orange
-                                  : client!.expiredAt!
-                                              .difference(DateTime.now())
-                                              .inDays <
-                                          0
-                                      ? Colors.red
-                                      : Colors.green,
+                          surfaceTintColor: client!.color,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
@@ -177,54 +165,33 @@ class _EnteringPageState extends State<EnteringPage> {
                                                   .displayLarge),
                                           Tooltip(
                                             // mostrar cuanto falta para expirar en lenguaje humano
-                                            message: client!.expiredAt!
-                                                        .difference(
-                                                            DateTime.now())
-                                                        .inDays <
-                                                    0
-                                                ? 'Expirado'
-                                                : client!.expiredAt!
-                                                            .difference(
-                                                                DateTime.now())
-                                                            .inDays <
-                                                        1
-                                                    ? 'Expira hoy'
-                                                    : client!.expiredAt!
-                                                                .difference(
-                                                                    DateTime
-                                                                        .now())
-                                                                .inDays <
-                                                            2
-                                                        ? 'Expira mañana'
-                                                        : 'Expira en ${client!.expiredAt?.difference(DateTime.now()).inDays} dias',
+                                            message: client!.timeToExpire,
                                             child: Text(
                                               client!.expiredAt
                                                   .toString()
                                                   .substring(0, 10),
                                               style: TextStyle(
-                                                fontWeight: FontWeight.w900,
-                                                fontSize: 40,
-                                                //Si esta expirado, mostrar en rojo, si le falta menos de 15 dias en naranjo, y si no en verde
-                                                color: client!.expiredAt!
-                                                            .difference(
-                                                                DateTime.now())
-                                                            .inDays <
-                                                        15
-                                                    ? Colors.orange
-                                                    : client!.expiredAt!
-                                                                .difference(
-                                                                    DateTime
-                                                                        .now())
-                                                                .inDays <
-                                                            0
-                                                        ? Colors.red
-                                                        : Colors.green,
-                                              ),
+                                                  fontWeight: FontWeight.w900,
+                                                  fontSize: 40,
+                                                  //Si esta expirado, mostrar en rojo, si le falta menos de 15 dias en naranjo, y si no en verde
+                                                  color: client!.color),
                                             ),
                                           ),
                                         ],
                                       ),
                                 const Divider(),
+                                Row(
+                                  children: [
+                                    Text('N° Cliente: ',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium),
+                                    Text(client?.numberClient.toString() ?? '',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium),
+                                  ],
+                                ),
                                 Row(
                                   children: [
                                     Text('Rut: ',

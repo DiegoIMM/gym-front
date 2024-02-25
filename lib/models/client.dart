@@ -1,13 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:gym_front/models/company.dart';
 import 'package:gym_front/models/plan.dart';
 
 class Client {
   bool enabled;
-  String rut;
-  String name;
-  String email;
-  String phone;
-  String auxiliarPhone;
+  String? rut;
+  int? numberClient;
+  String? name;
+  String? email;
+  String? phone;
+  String? auxiliarPhone;
   Company? empresa;
 
   String? city;
@@ -21,12 +23,13 @@ class Client {
 
   Client({
     required this.enabled,
-    required this.rut,
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.auxiliarPhone,
-    required this.empresa,
+    this.rut,
+    this.numberClient,
+    this.name,
+    this.email,
+    this.phone,
+    this.auxiliarPhone,
+    this.empresa,
     this.city,
     this.comuna,
     this.address,
@@ -40,6 +43,7 @@ class Client {
   factory Client.fromJson(Map<String, dynamic> json) => Client(
         enabled: json['enabled'],
         rut: json['rut'],
+        numberClient: json['numberClient'],
         name: json['name'],
         email: json['email'],
         phone: json['phone'],
@@ -68,6 +72,7 @@ class Client {
 
   Map<String, dynamic> toJson() => {
         'rut': rut,
+        'numberClient': numberClient,
         'address': address,
         'comuna': comuna,
         'city': city,
@@ -83,4 +88,44 @@ class Client {
         'empresa': empresa?.toJson() ?? '',
         'plan': plan?.toJson() ?? '',
       };
+
+  bool get isExpired {
+    if (expiredAt == null) return false;
+    return expiredAt!.difference(DateTime.now()).inDays < 0;
+  }
+
+  bool get isExpiring {
+    if (expiredAt == null) return false;
+    if (isExpired) return false;
+    return expiredAt!.difference(DateTime.now()).inDays < 15;
+  }
+
+  bool get isExpiringTomorrow {
+    if (expiredAt == null) return false;
+    if (isExpired) return false;
+    return expiredAt!.difference(DateTime.now()).inDays < 1;
+  }
+
+  bool get isNotExpired {
+    if (expiredAt == null) return false;
+    return expiredAt!.difference(DateTime.now()).inDays >= 0;
+  }
+
+  Color get color {
+    if (expiredAt == null) return Colors.grey;
+    if (isExpired) return Colors.red;
+    if (isExpiring) return Colors.orange;
+    return Colors.green;
+  }
+
+//   obtener cuanto tiempo falta para que expire
+  String get timeToExpire {
+    if (expiredAt == null) return 'Sin plan';
+    if (isExpired) return 'Expirado';
+    if (isExpiringTomorrow) return 'Expira mañana';
+    if (isExpiring) {
+      return 'Expira en ${expiredAt!.difference(DateTime.now()).inDays} dias';
+    }
+    return 'Expira en ${expiredAt!.difference(DateTime.now()).inDays} dias';
+  }
 }

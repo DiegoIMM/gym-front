@@ -49,7 +49,7 @@ class _PaymentFormState extends State<PaymentForm> {
       ]),
       'expiredAt': FormControl<DateTime>(
           value: DateTime.now(),
-          disabled: true,
+          disabled: false,
           validators: [
             Validators.required,
           ]),
@@ -118,7 +118,7 @@ class _PaymentFormState extends State<PaymentForm> {
                           decoration: const InputDecoration(
                             labelText: 'Fecha de expiración',
                           ),
-                          readOnly: true,
+                          readOnly: false,
                         ),
                         Row(
                           children: [
@@ -184,7 +184,7 @@ class _PaymentFormState extends State<PaymentForm> {
                                 // },
                                 items: allClients,
                                 itemAsString: (Client? u) =>
-                                    '${u!.rut} - ${u.name}',
+                                    '${u!.numberClient} - ${u!.rut} - ${u.name}',
                               ),
                             ),
                             Expanded(
@@ -219,6 +219,10 @@ class _PaymentFormState extends State<PaymentForm> {
                               DropdownMenuItem(
                                 value: 'Debito',
                                 child: Text('Debito'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'Transferencia',
+                                child: Text('Transferencia'),
                               ),
                             ]),
                         ReactiveTextField(
@@ -296,19 +300,27 @@ class _PaymentFormState extends State<PaymentForm> {
     print('client: $client');
 
     // si cliente tiene fecha de expiración sumar desde esa fecha fecha, si no, sumar desde hoy
-
+    var today = DateTime.now();
     if (client.expiredAt != null) {
-      var expiredAt =
-          client.expiredAt!.add(Duration(days: plan.durationInDays()));
-      setState(() {
-        formPayment.control('expiredAt').value = expiredAt;
-      });
+      if (client.expiredAt!.isAfter(today)) {
+        var expiredAt =
+            client.expiredAt!.add(Duration(days: plan.durationInDays()));
+        setState(() {
+          formPayment.control('expiredAt').value = expiredAt;
+        });
+      } else {
+        var newExpiredAt = today.add(Duration(days: plan.durationInDays()));
+        setState(() {
+          formPayment.control('expiredAt').value = newExpiredAt;
+        });
+      }
     } else {
       var expiredAt = date.add(Duration(days: plan.durationInDays()));
       setState(() {
         formPayment.control('expiredAt').value = expiredAt;
       });
     }
+    //   TODO: Si el plan esta expirado le debe sumar desde hoy
   }
 
   void createPayment() {
@@ -318,7 +330,7 @@ class _PaymentFormState extends State<PaymentForm> {
       // form.control('userId').value = widget.userId;
 
       print('Formulario enviado -> ${PaymentDTO(
-        rutClient: (formPayment.control('rutClient').value as Client).rut,
+        rutClient: (formPayment.control('rutClient').value as Client).rut!,
         idEmpresa: formPayment.control('idEmpresa').value,
         idPlan: formPayment.control('idPlan').value,
         typeOfPayment: formPayment.control('typeOfPayment').value,
@@ -332,7 +344,7 @@ class _PaymentFormState extends State<PaymentForm> {
       });
       apiService
           .createPayment(PaymentDTO(
-        rutClient: (formPayment.control('rutClient').value as Client).rut,
+        rutClient: (formPayment.control('rutClient').value as Client).rut!,
         idEmpresa: formPayment.control('idEmpresa').value,
         idPlan: formPayment.control('idPlan').value,
         typeOfPayment: formPayment.control('typeOfPayment').value,

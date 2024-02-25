@@ -9,6 +9,7 @@ class ClientDTO {
   String phone;
   String auxiliarPhone;
   int idEmpresa;
+  int? numberClient;
   DateTime? expiredAt;
   Plan? plan;
   Payment? payment;
@@ -25,6 +26,7 @@ class ClientDTO {
     required this.phone,
     required this.auxiliarPhone,
     required this.idEmpresa,
+    this.numberClient,
     this.expiredAt,
     this.plan,
     this.payment,
@@ -43,7 +45,9 @@ class ClientDTO {
         'birthDate': birthDate?.toString().substring(0, 10),
         'email': email,
         'enabled': enabled,
-        'expiredAt': expiredAt,
+        'numberClient': numberClient,
+        // FIXME: Esto quizas de errores para planes diarios, ya que no guarda la hora
+        'expiredAt': expiredAt?.toString().substring(0, 10),
         'name': name,
         'phone': phone,
         'plan': plan?.toJson(),
@@ -62,6 +66,7 @@ class ClientDTO {
             : null,
         email: json['email'],
         enabled: json['enabled'],
+        numberClient: json['numberClient'],
         expiredAt: json['expiredAt'],
         name: json['name'],
         phone: json['phone'],

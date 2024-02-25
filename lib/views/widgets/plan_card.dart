@@ -23,7 +23,11 @@ class PlanCard extends StatelessWidget {
               children: [
                 Text(
                   plan.name,
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: TextStyle(
+                    color: plan.enabled ? Colors.black : Colors.grey,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                  ),
                   softWrap: true,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -63,32 +67,15 @@ class PlanCard extends StatelessWidget {
                             color: Colors.green,
                             fontSize: 20,
                             fontWeight: FontWeight.bold)),
-                    const Spacer(),
-                    canEdit
-                        ? OutlinedButton(
-                            onPressed: () async {
-                              var result = await showDialog<dynamic>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return PlanForm(
-                                    plan: plan,
-                                  );
-                                },
-                              );
 
-                              print("result: $result");
-                            },
-                            child: const Row(
-                              children: [
-                                Icon(
-                                  Icons.edit,
-                                  color: Colors.purple,
-                                ),
-                                Text('Editar Plan',
-                                    style: TextStyle(color: Colors.purple)),
-                              ],
-                            ))
-                        : Container(),
+                    const Spacer(),
+                    Chip(
+                      label: Text('Plan ${plan.period}'),
+                      backgroundColor: plan.enabled
+                          ? Colors.green.shade100
+                          : Colors.red.shade100,
+                    ),
+
                     const SizedBox(width: 8),
                     // TODO: Botón y función para eliminar
                     // TextButton(
@@ -181,13 +168,33 @@ class PlanCard extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 8,
-          right: 8,
-          child: Chip(
-            label: Text('Plan ${plan.period}'),
-            backgroundColor:
-                plan.enabled ? Colors.green.shade100 : Colors.red.shade100,
-          ),
+          top: 0,
+          right: 0,
+          child: canEdit
+              ? Tooltip(
+                  message: 'Editar',
+                  child: IconButton(
+                    onPressed: () async {
+                      var result = await showDialog<dynamic>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return PlanForm(
+                            plan: plan,
+                          );
+                        },
+                      );
+
+                      print("result: $result");
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.purple),
+                      shape: MaterialStateProperty.all(const CircleBorder()),
+                    ),
+                    color: Colors.white,
+                    icon: const Icon(Icons.edit),
+                  ),
+                )
+              : Container(),
         )
       ],
     );

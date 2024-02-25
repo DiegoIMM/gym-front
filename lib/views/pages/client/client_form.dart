@@ -34,6 +34,9 @@ class _ClientFormState extends State<ClientForm> {
           validators: [
             Validators.required,
           ]),
+      'numberClient': FormControl<int>(
+          value: widget.client != null ? widget.client!.numberClient : null,
+          validators: []),
       'rut': FormControl<String>(
           disabled: widget.client != null,
           value: widget.client != null
@@ -151,7 +154,7 @@ class _ClientFormState extends State<ClientForm> {
                 children: [
                   widget.client != null
                       ? Text(
-                          'Editar cliente',
+                          'Editar cliente N° ${widget.client!.numberClient}',
                           style: Theme.of(context).textTheme.displayMedium,
                         )
                       : Text(

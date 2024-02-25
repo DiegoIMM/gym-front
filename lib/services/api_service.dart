@@ -20,7 +20,11 @@ class ApiService {
   final String _authUrl = Environment().config.authUrl;
   final String _apiUrl = Environment().config.apiUrl;
 
-  Map<String, String> get headers => {"Content-Type": "application/json"};
+  Map<String, String> get headers => {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE",
+      };
 
   Future<Map<String, String>> _getHeadersWithToken() async {
     AuthService authService = AuthService();
@@ -28,6 +32,8 @@ class ApiService {
 
     return {
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE",
     };
   }
 
