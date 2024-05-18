@@ -89,6 +89,18 @@ class Client {
         'plan': plan?.toJson() ?? '',
       };
 
+  String getFormattedExpireDate() {
+    if (expiredAt == null) return 'Sin plan';
+    // responder en formato dd/mm/yyyy
+    return '${expiredAt!.day.toString().padLeft(2, '0')}/${expiredAt!.month.toString().padLeft(2, '0')}/${expiredAt!.year}';
+  }
+
+  String getFormattedBirthDate() {
+    if (birthDate == null) return 'Sin fecha';
+    // responder en formato dd/mm/yyyy
+    return '${birthDate!.day.toString().padLeft(2, '0')}/${birthDate!.month.toString().padLeft(2, '0')}/${birthDate!.year}';
+  }
+
   bool get isExpired {
     if (expiredAt == null) return false;
     return expiredAt!.difference(DateTime.now()).inDays < 0;

@@ -103,7 +103,7 @@ class _ClientsPageState extends State<ClientsPage> {
                         });
                       }
 
-                      void _sort(int columnIndex, bool ascending) {
+                      void sort(int columnIndex, bool ascending) {
                         setState(() {
                           _columnIndex = columnIndex;
                           _columnAscending = ascending;
@@ -209,54 +209,54 @@ class _ClientsPageState extends State<ClientsPage> {
                                           header: const Text('Clientes'),
                                           columns: <DataColumn>[
                                             DataColumn(
-                                                label: Text('N°',
+                                                label: const Text('N°',
                                                     style: TextStyle(
                                                       fontSize: 24,
                                                       fontWeight:
                                                           FontWeight.w900,
                                                     )),
-                                                onSort: _sort),
+                                                onSort: sort),
                                             DataColumn(
-                                                label: Text('Rut',
+                                                label: const Text('Rut',
                                                     style: TextStyle(
                                                       fontSize: 24,
                                                       fontWeight:
                                                           FontWeight.w900,
                                                     )),
-                                                onSort: _sort),
+                                                onSort: sort),
                                             DataColumn(
-                                                label: Text('Nombre',
+                                                label: const Text('Nombre',
                                                     style: TextStyle(
                                                       fontSize: 24,
                                                       fontWeight:
                                                           FontWeight.w900,
                                                     )),
-                                                onSort: _sort),
+                                                onSort: sort),
                                             DataColumn(
-                                                label: Text('Teléfono',
+                                                label: const Text('Teléfono',
                                                     style: TextStyle(
                                                       fontSize: 24,
                                                       fontWeight:
                                                           FontWeight.w900,
                                                     )),
-                                                onSort: _sort),
+                                                onSort: sort),
                                             DataColumn(
-                                                label: Text('Plan',
+                                                label: const Text('Plan',
                                                     style: TextStyle(
                                                       fontSize: 24,
                                                       fontWeight:
                                                           FontWeight.w900,
                                                     )),
-                                                onSort: _sort),
+                                                onSort: sort),
                                             DataColumn(
-                                                label: Text('Expira',
+                                                label: const Text('Expira',
                                                     style: TextStyle(
                                                       fontSize: 24,
                                                       fontWeight:
                                                           FontWeight.w900,
                                                     )),
-                                                onSort: _sort),
-                                            DataColumn(
+                                                onSort: sort),
+                                            const DataColumn(
                                               label: Text('Acciones',
                                                   style: TextStyle(
                                                     fontSize: 24,

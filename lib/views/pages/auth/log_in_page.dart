@@ -9,7 +9,7 @@ import '../../../services/api_service.dart';
 import '../../../services/auth_service.dart';
 
 class LogInPage extends StatefulWidget {
-  LogInPage({Key? key}) : super(key: key);
+  const LogInPage({Key? key}) : super(key: key);
   static final _apiService = ApiService();
 
   @override

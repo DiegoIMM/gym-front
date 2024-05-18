@@ -82,12 +82,12 @@ class _ClientFormState extends State<ClientForm> {
           value: widget.client != null
               ? widget.client!.phone
               : kDebugMode
-                  ? ''
-                  : '',
+                  ? '+569'
+                  : '+569',
           validators: [
-            Validators.required,
-            Validators.pattern(r'^(\+?56)?(\s?)(0?9)(\s?)[9876543210]\d{7}$',
-                validationMessage: 'No es un número de teléfono válido')
+            // Validators.required,
+            // Validators.pattern(r'^(\+?56)?(\s?)(0?9)(\s?)[9876543210]\d{7}$',
+            //     validationMessage: 'No es un número de teléfono válido')
           ]),
       'auxiliarPhone': FormControl<String>(
           value: widget.client != null
@@ -96,9 +96,9 @@ class _ClientFormState extends State<ClientForm> {
                   ? ''
                   : '',
           validators: [
-            Validators.required,
-            Validators.pattern(r'^(\+?56)?(\s?)(0?9)(\s?)[9876543210]\d{7}$',
-                validationMessage: 'No es un número de teléfono válido')
+            // Validators.required,
+            // Validators.pattern(r'^(\+?56)?(\s?)(0?9)(\s?)[9876543210]\d{7}$',
+            //     validationMessage: 'No es un número de teléfono válido')
           ]),
       'idEmpresa': FormControl<int>(
           value: widget.client != null ? widget.client!.empresa!.id : 1,
@@ -109,13 +109,13 @@ class _ClientFormState extends State<ClientForm> {
           value: widget.client != null
               ? widget.client!.city
               : kDebugMode
-                  ? ''
+                  ? 'Bulnes'
                   : null),
       'comuna': FormControl<String>(
           value: widget.client != null
               ? widget.client!.comuna
               : kDebugMode
-                  ? ''
+                  ? 'Bulnes'
                   : null),
       'address': FormControl<String>(
           value: widget.client != null
@@ -267,7 +267,7 @@ class _ClientFormState extends State<ClientForm> {
                               enableInteractiveSelection: true,
                               enableSuggestions: true,
                               decoration: const InputDecoration(
-                                labelText: 'Teléfono Auxiliar',
+                                labelText: 'Contacto de emergencia',
                                 icon: Icon(Icons.short_text),
                               ),
                               formControlName: 'auxiliarPhone',
@@ -384,7 +384,7 @@ class _ClientFormState extends State<ClientForm> {
                             ),
                             child: const Text('Cancelar'),
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              Navigator.of(context).pop(false);
                             },
                           ),
                           const SizedBox(

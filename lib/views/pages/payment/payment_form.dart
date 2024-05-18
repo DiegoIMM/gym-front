@@ -184,7 +184,7 @@ class _PaymentFormState extends State<PaymentForm> {
                                 // },
                                 items: allClients,
                                 itemAsString: (Client? u) =>
-                                    '${u!.numberClient} - ${u!.rut} - ${u.name}',
+                                    '${u!.numberClient} - ${u.rut} - ${u.name}',
                               ),
                             ),
                             Expanded(
@@ -242,7 +242,7 @@ class _PaymentFormState extends State<PaymentForm> {
                               ),
                               child: const Text('Cancelar'),
                               onPressed: () {
-                                Navigator.of(context).pop();
+                                Navigator.of(context).pop(false);
                               },
                             ),
                             const SizedBox(

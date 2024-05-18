@@ -9,6 +9,7 @@ import 'package:gym_front/views/pages/auth/sign_up_page.dart';
 import 'package:gym_front/views/pages/auth/validate_account_page.dart';
 import 'package:gym_front/views/pages/auth/validate_email_page.dart';
 import 'package:gym_front/views/pages/client/clients_page.dart';
+import 'package:gym_front/views/pages/entering/entering_n_page.dart';
 import 'package:gym_front/views/pages/entering/entering_page.dart';
 import 'package:gym_front/views/pages/home_page.dart';
 import 'package:gym_front/views/pages/payment/payment_page.dart';
@@ -61,11 +62,11 @@ final _router = GoRouter(
           routes: [
             GoRoute(
               path: 'login',
-              builder: (context, state) => Material(child: LogInPage()),
+              builder: (context, state) => const Material(child: LogInPage()),
             ),
             GoRoute(
               path: 'register',
-              builder: (context, state) => Material(child: SignUpPage()),
+              builder: (context, state) => const Material(child: SignUpPage()),
             ),
             GoRoute(
               path: 'recovery-password',
@@ -93,6 +94,10 @@ final _router = GoRouter(
         GoRoute(
           path: '/ingreso',
           builder: (context, state) => const Material(child: EnteringPage()),
+        ),
+        GoRoute(
+          path: '/ingresoNCliente',
+          builder: (context, state) => const Material(child: EnteringNPage()),
         ),
         GoRoute(
           path: '/planes',

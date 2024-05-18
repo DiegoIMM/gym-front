@@ -54,7 +54,7 @@ class _PlanFormState extends State<PlanForm> {
           ]),
       'price': FormControl<int>(
           value: widget.plan != null ? widget.plan!.price : 0,
-          validators: [Validators.number, Validators.required]),
+          validators: [Validators.number(), Validators.required]),
     });
   }
 
@@ -219,7 +219,7 @@ class _PlanFormState extends State<PlanForm> {
                               ),
                               child: const Text('Cancelar'),
                               onPressed: () {
-                                Navigator.of(context).pop();
+                                Navigator.of(context).pop(false);
                               },
                             ),
                             const SizedBox(

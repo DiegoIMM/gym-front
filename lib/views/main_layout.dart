@@ -92,10 +92,20 @@ class MainLayout extends StatelessWidget {
             authenticatedWidget(
                 context.watch<AuthService>().isAuthenticated,
                 ListTile(
-                    title: const Text('Ingresos'),
+                    title: const Text('Ingresos por RUT'),
                     selected: GoRouterState.of(context).fullPath == '/ingreso',
                     onTap: () {
                       context.go('/ingreso');
+                    })),
+
+            authenticatedWidget(
+                context.watch<AuthService>().isAuthenticated,
+                ListTile(
+                    title: const Text('Ingresos por N°'),
+                    selected: GoRouterState.of(context).fullPath ==
+                        '/ingresoNCliente',
+                    onTap: () {
+                      context.go('/ingresoNCliente');
                     })),
 
             authenticatedWidget(

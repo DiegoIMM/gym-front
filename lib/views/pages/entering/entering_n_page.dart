@@ -4,18 +4,17 @@ import 'package:gym_front/services/api_service.dart';
 import 'package:gym_front/views/widgets/plan_card.dart';
 import 'package:provider/provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
-import 'package:rut_utils/rut_utils.dart';
 
 import '../../../services/scaffold_messenger_service.dart';
 
-class EnteringPage extends StatefulWidget {
-  const EnteringPage({super.key});
+class EnteringNPage extends StatefulWidget {
+  const EnteringNPage({super.key});
 
   @override
-  State<EnteringPage> createState() => _EnteringPageState();
+  State<EnteringNPage> createState() => _EnteringNPageState();
 }
 
-class _EnteringPageState extends State<EnteringPage> {
+class _EnteringNPageState extends State<EnteringNPage> {
   Client? client;
 
   static var apiService = ApiService();
@@ -27,25 +26,8 @@ class _EnteringPageState extends State<EnteringPage> {
   }
 
   var formClient = FormGroup({
-    'rut': FormControl<String>(value: '', validators: [
-      Validators.required,
-      Validators.delegate((control) {
-        final rut = control.value;
-        return null;
-        // retornar error si el rut tiene un caracter distinto a un numero o una letra k
-        // if (!rut.contains(RegExp(r'[^0-9kK]'))) {
-        //   return {'formatRut': true};
-        // }
-        //
-        // if (rut.isEmpty) {
-        //   return null;
-        // }
-        // if (!isRutValid(rut)) {
-        //   return {'formatRut': true};
-        // }
-        // return null;
-      }),
-    ]),
+    'ncliente':
+        FormControl<String>(value: '', validators: [Validators.required]),
     'idEmpresa': FormControl<int>(value: 2, validators: [
       Validators.required,
     ]),
@@ -58,7 +40,7 @@ class _EnteringPageState extends State<EnteringPage> {
           padding: const EdgeInsets.all(10),
           child: Column(children: [
             Text(
-              'Consultar ingreso',
+              'Consultar ingreso por número de cliente',
               style: Theme.of(context).textTheme.displayMedium,
             ),
             ReactiveForm(
@@ -73,24 +55,14 @@ class _EnteringPageState extends State<EnteringPage> {
                           child: ReactiveTextField(
                             enableInteractiveSelection: true,
                             enableSuggestions: true,
-                            onChanged: (control) {
-                              var unformattedRut =
-                                  deFormatRut(control.value.toString());
-                              var formattedRut = formatRut(unformattedRut);
-                              setState(() {
-                                formClient.control('rut').value = formattedRut.toUpperCase();
-                              });
-                            },
                             decoration: const InputDecoration(
-                              labelText: 'Rut',
+                              labelText: 'N° de cliente',
                               icon: Icon(Icons.short_text),
                             ),
-                            formControlName: 'rut',
+                            formControlName: 'ncliente',
                             validationMessages: {
                               'required': (error) =>
-                                  'El rut no puede estar vacío',
-                              'formatRut': (error) =>
-                                  'El rut ingresado no es válido',
+                                  'El N° no puede estar vacío',
                             },
                           ),
                         ),
@@ -107,7 +79,7 @@ class _EnteringPageState extends State<EnteringPage> {
                           onPressed: () {
                             setState(() {
                               client = null;
-                              formClient.control('rut').value = '';
+                              formClient.control('ncliente').value = '';
                               formClient.clearValidators();
                               formClient.markAsUntouched();
                             });
@@ -225,7 +197,7 @@ class _EnteringPageState extends State<EnteringPage> {
                       ),
                     ],
                   )
-                : const Text('Ingrese un rut para consultar'),
+                : const Text('Ingrese un N° para consultar'),
           ])),
     );
   }
@@ -236,10 +208,10 @@ class _EnteringPageState extends State<EnteringPage> {
     });
     if (formClient.valid) {
       print(formClient.value);
-      print(formClient.value['rut'].toString());
+      print(formClient.value['ncliente'].toString());
 
       apiService
-          .getClientByRut(formClient.value['rut'].toString())
+          .getClientByNCliente(formClient.value['ncliente'].toString())
           .then((value) {
         Provider.of<ScaffoldMessengerService>(context, listen: false)
             .showSnackBar(

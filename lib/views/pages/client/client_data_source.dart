@@ -32,7 +32,7 @@ class ClientsDataSource extends DataTableSource {
                 // mostrar cuanto falta para expirar en lenguaje humano
                 message: client.timeToExpire,
                 child: Text(
-                  client.expiredAt.toString().substring(0, 10),
+                  client.getFormattedExpireDate(),
                   style: TextStyle(
                       //Si esta expirado, mostrar en rojo, si le falta menos de 15 dias en naranjo, y si no en verde
                       color: client.color),

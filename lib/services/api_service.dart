@@ -324,4 +324,16 @@ class ApiService {
 
     return Client.fromJson(jsonResult);
   }
+
+  Future<Client> getClientByNCliente(String nCliente) async {
+    // TODO: Reemplazar a endpoint que usa empresas para buscar los clientes filtrados
+    final response =
+        await http.get(Uri.parse('${_apiUrl}client/number/$nCliente'), headers: headers);
+
+    var jsonResult = await _handleResponse(response).catchError((error) {
+      throw error;
+    });
+
+    return Client.fromJson(jsonResult);
+  }
 }
