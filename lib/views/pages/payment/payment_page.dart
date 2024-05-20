@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_front/views/pages/payment/payment_data_source.dart';
 import 'package:gym_front/views/pages/payment/payment_form.dart';
 
 import '../../../models/payment.dart';
@@ -17,7 +18,8 @@ class _PlanPageState extends State<PaymentPage> {
   late Future<List<Payment>> futurePayments;
 
   static var apiService = ApiService();
-
+  int _columnIndex = 0;
+  bool _columnAscending = true;
   @override
   void initState() {
     super.initState();
@@ -89,134 +91,148 @@ class _PlanPageState extends State<PaymentPage> {
                       var width = MediaQuery.of(context).size.width;
                       var payments = snapshot.data!;
 
+                      void filterByName(String text) {
+                        var a = payments
+                            .where((payment) => payment.client.name!
+                                .toLowerCase()
+                                .contains(text.toLowerCase()))
+                            .toList();
+                        setState(() {
+                          print(payments.length);
+                        });
+                      }
+
+                      void sort(int columnIndex, bool ascending) {
+
+                        setState(() {
+                          _columnIndex = columnIndex;
+                          _columnAscending = ascending;
+                          if (columnIndex == 0) {
+                            if (ascending) {
+                              payments.sort((a, b) => b.date.compareTo(a.date));
+                            } else {
+                              payments.sort((a, b) => a.date.compareTo(b.date));
+                            }
+                          }
+                          if (columnIndex == 1) {
+                            if (ascending) {
+                              payments.sort((a, b) =>
+                                  a.client.name!.compareTo(b.client.name!));
+                            } else {
+                              payments.sort((a, b) =>
+                                  b.client.name!.compareTo(a.client.name!));
+                            }
+                          }
+                          if (columnIndex == 2) {
+                            if (ascending) {
+                              payments.sort(
+                                  (a, b) => a.plan.name.compareTo(b.plan.name));
+                            } else {
+                              payments.sort(
+                                  (a, b) => b.plan.name.compareTo(a.plan.name));
+                            }
+                          }
+                          if (columnIndex == 3) {
+                            if (ascending) {
+                              payments.sort(
+                                  (a, b) => a.expiredAt.compareTo(b.expiredAt));
+                            } else {
+                              payments.sort(
+                                  (a, b) => b.expiredAt.compareTo(a.expiredAt));
+                            }
+                          }
+                          if (columnIndex == 4) {
+                            if (ascending) {
+                              payments
+                                  .sort((a, b) => a.price.compareTo(b.price));
+                            } else {
+                              payments
+                                  .sort((a, b) => b.price.compareTo(a.price));
+                            }
+                          }
+                        });
+                      }
                       return payments.isEmpty
                           ? NoData()
                           : Column(children: [
                               Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: (width > 1000) ? 8.0 : 0.0,
-                                    horizontal: (width > 1000) ? 50.0 : 8.0,
-                                  ),
-                                  child: Row(children: [
-                                    Expanded(
-                                        child: Center(
-                                            child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: DataTable(
-                                        columns: const <DataColumn>[
-                                          DataColumn(
-                                            label: Text(
-                                              'Fecha',
-                                              style: TextStyle(
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.w900,
-                                              ),
-                                            ),
-                                          ),
-                                          DataColumn(
-                                            label: Text(
-                                              'Cliente',
-                                              style: TextStyle(
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.w900,
-                                              ),
-                                            ),
-                                          ),
-                                          DataColumn(
-                                            label: Text(
-                                              'Plan',
-                                              style: TextStyle(
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.w900,
-                                              ),
-                                            ),
-                                          ),
-                                          DataColumn(
-                                            label: Text(
-                                              'Expira',
-                                              style: TextStyle(
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.w900,
-                                              ),
-                                            ),
-                                          ),
-                                          DataColumn(
-                                            label: Text(
-                                              'Pagado',
-                                              style: TextStyle(
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.w900,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                        rows: [
-                                          for (var payment in payments)
-                                            DataRow(
-                                              cells: <DataCell>[
-                                                DataCell(Text(payment.date
-                                                    .toString()
-                                                    .substring(0, 10))),
-                                                DataCell(Text(
-                                                    '${payment.client.name} - ${payment.client.rut}')),
-                                                DataCell(
-                                                    Text(payment.plan.name)),
-                                                DataCell(Tooltip(
-                                                  // mostrar cuanto falta para expirar en lenguaje humano
-                                                  message: payment.expiredAt
-                                                              .difference(
-                                                                  DateTime
-                                                                      .now())
-                                                              .inDays <
-                                                          0
-                                                      ? 'Expirado'
-                                                      : payment.expiredAt
-                                                                  .difference(
-                                                                      DateTime
-                                                                          .now())
-                                                                  .inDays <
-                                                              1
-                                                          ? 'Expira hoy'
-                                                          : payment.expiredAt
-                                                                      .difference(
-                                                                          DateTime
-                                                                              .now())
-                                                                      .inDays <
-                                                                  2
-                                                              ? 'Expira mañana'
-                                                              : 'Expira en ${payment.expiredAt.difference(DateTime.now()).inDays} dias',
-                                                  child: Text(
-                                                    payment.expiredAt
-                                                        .toString()
-                                                        .substring(0, 10),
-                                                    style: TextStyle(
-                                                      //Si esta expirado, mostrar en rojo, si le falta menos de 15 dias en naranjo, y si no en verde
-                                                      color: payment.expiredAt
-                                                                  .difference(
-                                                                      DateTime
-                                                                          .now())
-                                                                  .inDays <
-                                                              15
-                                                          ? Colors.orange
-                                                          : payment.expiredAt
-                                                                      .difference(
-                                                                          DateTime
-                                                                              .now())
-                                                                      .inDays <
-                                                                  0
-                                                              ? Colors.red
-                                                              : Colors.green,
-                                                    ),
-                                                  ),
+                                padding: EdgeInsets.symmetric(
+                                  vertical: (width > 1000) ? 8.0 : 0.0,
+                                  horizontal: (width > 1000) ? 50.0 : 8.0,
+                                ),
+                                child: Row(children: [
+                                  Expanded(
+                                    child: PaginatedDataTable(
+                                      sortColumnIndex: _columnIndex,
+                                      sortAscending: _columnAscending,
+                                      rowsPerPage: 20,
+                                      availableRowsPerPage: const [20, 40, 50],
+                                      actions: [
+                                        IconButton(
+                                          icon: const Icon(Icons.refresh),
+                                          tooltip: 'Recargar',
+                                          onPressed: () {
+                                            getPayments();
+                                          },
+                                        ),
+                                      ],
+                                      primary: true,
+                                      showFirstLastButtons: true,
+                                      header: const Text('Pagos'),
+                                      columns: [
+                                        DataColumn(
+                                            label: const Text('Fecha',
+                                                style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.w900,
                                                 )),
-                                                DataCell(Text(
-                                                    '\$${payment.price.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}')),
-                                              ],
-                                            ),
-                                        ],
-                                      ),
-                                    )))
-                                  ]))
+                                            onSort: (columnIndex, ascending) {
+                                              sort(columnIndex, ascending);
+                                            }),
+                                        DataColumn(
+                                            label: const Text('Cliente',
+                                                style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.w900,
+                                                )),
+                                            onSort: (columnIndex, ascending) {
+                                              sort(columnIndex, ascending);
+                                            }),
+                                        DataColumn(
+                                            label: const Text('Plan',
+                                                style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.w900,
+                                                )),
+                                            onSort: (columnIndex, ascending) {
+                                              sort(columnIndex, ascending);
+                                            }),
+                                        DataColumn(
+                                            label: const Text('Vencimiento',
+                                                style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.w900,
+                                                )),
+                                            onSort: (columnIndex, ascending) {
+                                              sort(columnIndex, ascending);
+                                            }),
+                                        DataColumn(
+                                            label: const Text('Precio',
+                                                style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.w900,
+                                                )),
+                                            onSort: (columnIndex, ascending) {
+                                              sort(columnIndex, ascending);
+                                            }),
+                                      ],
+                                      source: PaymentsDataSource(
+                                          payments: payments, context: context),
+                                    ),
+                                  
+                                  ),
+                                ]),
+                              ),
                             ]);
                     } else {
                       return const Text('No hay datos');

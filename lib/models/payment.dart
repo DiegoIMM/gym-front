@@ -32,6 +32,18 @@ class Payment {
     );
   }
 
+  String getFormattedDate() {
+    return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+  }
+
+  String getFormattedExpiredAt() {
+    return '${expiredAt.day.toString().padLeft(2, '0')}/${expiredAt.month.toString().padLeft(2, '0')}/${expiredAt.year}';
+  }
+
+  String getFormattedPrice(){
+    return '\$${price.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}';
+  }
+
   static List<Payment> fromJsonList(List<dynamic> jsonList) {
     return jsonList.map((json) {
       return Payment.fromJson(json);

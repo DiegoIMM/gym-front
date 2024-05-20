@@ -275,8 +275,11 @@ class ApiService {
     var jsonResult = await _handleResponse(response).catchError((error) {
       throw error;
     });
+    var payments = Payment.fromJsonList(jsonResult);
+    
+    payments.sort((a, b) => b.date.compareTo(a.date));
 
-    return Payment.fromJsonList(jsonResult);
+    return payments;
   }
 
   Future<List<Client>> getClientsByEnterprise() async {
